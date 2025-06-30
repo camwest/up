@@ -88,7 +88,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
       
       {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div className="bg-background border border-primary/30 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto shadow-neon">
+        <div className="bg-background border border-primary/30 rounded-sm max-w-md w-full max-h-[90vh] overflow-y-auto shadow-neon">
           <div className="p-6 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
               <label className="text-sm font-headline font-medium text-foreground">
                 Share Message
               </label>
-              <div className="bg-muted/30 border border-border rounded-lg p-3">
+              <div className="bg-muted/30 border border-border rounded-sm p-3">
                 <p className="text-sm text-foreground">
                   {displayMessage}
                 </p>
@@ -124,7 +124,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 placeholder="Enter your own message (use [link] for the URL)"
-                className="w-full p-3 bg-background border border-border rounded-lg text-sm resize-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
+                className="w-full p-3 bg-background border border-border rounded-sm text-sm resize-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
                 rows={3}
               />
               <p className="text-xs text-muted-foreground">
@@ -144,7 +144,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
                   <button
                     onClick={handleNativeShare}
                     disabled={sharing}
-                    className="flex items-center gap-3 p-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors disabled:opacity-50"
+                    className="flex items-center gap-3 p-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-sm transition-colors disabled:opacity-50"
                   >
                     <span className="text-lg">📱</span>
                     <span className="font-medium">
@@ -156,7 +156,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
                 {/* Platform-specific shares */}
                 <button
                   onClick={() => handlePlatformShare(createSMSUrl(displayMessage))}
-                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors"
+                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-sm transition-colors"
                 >
                   <span className="text-lg">💬</span>
                   <span className="font-medium">Text Message</span>
@@ -164,7 +164,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
                 <button
                   onClick={() => handlePlatformShare(createWhatsAppUrl(displayMessage))}
-                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors"
+                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-sm transition-colors"
                 >
                   <span className="text-lg">📱</span>
                   <span className="font-medium">WhatsApp</span>
@@ -172,7 +172,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
                 <button
                   onClick={() => handlePlatformShare(createEmailUrl(displayMessage))}
-                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors"
+                  className="flex items-center gap-3 p-3 bg-muted hover:bg-muted/80 text-foreground rounded-sm transition-colors"
                 >
                   <span className="text-lg">✉️</span>
                   <span className="font-medium">Email</span>
@@ -189,7 +189,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
               <div className="grid grid-cols-1 gap-2">
                 <button
                   onClick={handleCopyMessage}
-                  className="flex items-center justify-between p-3 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors text-left"
+                  className="flex items-center justify-between p-3 bg-muted hover:bg-muted/80 text-foreground rounded-sm transition-colors text-left"
                 >
                   <span className="font-medium">Copy Full Message</span>
                   <span className="text-xs text-muted-foreground">
@@ -199,7 +199,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
                 <button
                   onClick={handleCopyUrl}
-                  className="flex items-center justify-between p-3 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors text-left"
+                  className="flex items-center justify-between p-3 bg-muted hover:bg-muted/80 text-foreground rounded-sm transition-colors text-left"
                 >
                   <span className="font-medium">Copy URL Only</span>
                   <span className="text-xs text-muted-foreground">
@@ -210,7 +210,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
             </div>
 
             {/* Help Text */}
-            <div className="text-xs text-muted-foreground bg-muted/20 rounded-lg p-3">
+            <div className="text-xs text-muted-foreground bg-muted/20 rounded-sm p-3">
               <p className="font-medium mb-1">💡 Pro tip:</p>
               <p>
                 Send the link to friends who need to find you, or share your pattern 
@@ -249,7 +249,7 @@ export function ShareButton({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className={`flex items-center gap-2 px-4 py-2 font-medium rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${buttonStyles} ${className}`}
+        className={`flex items-center gap-2 px-4 py-2 font-medium rounded-sm transition-all duration-200 hover:scale-105 active:scale-95 ${buttonStyles} ${className}`}
       >
         <span>📤</span>
         <span>Share Pattern</span>

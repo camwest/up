@@ -15,13 +15,13 @@ export async function generateMetadata({ params }: PatternPageProps): Promise<Me
   
   if (!pattern) {
     return {
-      title: "Pattern Not Found - Concert Finder",
-      description: "This pattern link is invalid or malformed.",
+      title: "Signal Not Found - Signal Up",
+      description: "This signal link is invalid or malformed.",
     };
   }
 
-  const title = `${patternName.toUpperCase()} - Concert Finder Pattern`;
-  const description = `Look for this ${pattern.animation} pattern flashing at speed ${pattern.speed}. Click to display the pattern and hold your phone up high so friends can find you!`;
+  const title = `${patternName.toUpperCase()} - Signal Up`;
+  const description = `Look for this ${pattern.animation} signal flashing at speed ${pattern.speed}. Put your signal up and let friends find you!`;
   
   return {
     title,
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PatternPageProps): Promise<Me
           url: "/opengraph-image.png",
           width: 1200,
           height: 630,
-          alt: `Concert Finder Pattern: ${patternName.toUpperCase()}`,
+          alt: `Signal Up: ${patternName.toUpperCase()}`,
         },
       ],
     },

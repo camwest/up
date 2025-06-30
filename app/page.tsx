@@ -1,16 +1,14 @@
 import { Hero } from "@/components/hero";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground flex flex-col">
       <nav className="w-full border-b border-border">
-        <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
+        <div className="max-w-4xl mx-auto flex justify-center items-center p-3">
           <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
             Signal Up
           </Link>
-          <ThemeSwitcher />
         </div>
       </nav>
 

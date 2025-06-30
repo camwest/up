@@ -75,7 +75,7 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
 
   if (!mounted) {
     return (
-      <div className={`bg-background border border-border rounded-lg ${className}`}>
+      <div className={`bg-background border border-border rounded-sm ${className}`}>
         <div className="flex items-center justify-center h-full text-muted-foreground">
           Loading pattern...
         </div>
@@ -93,7 +93,7 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
   
   const containerClass = fullscreen 
     ? "fixed inset-0 pattern-display"
-    : `relative overflow-hidden rounded-lg border border-border ${className}`;
+    : `relative overflow-hidden rounded-sm border border-border ${className}`;
 
   const primaryStyle = {
     backgroundColor: `#${pattern.primary}`,
@@ -145,7 +145,7 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
           {onExit && (
             <button
               onClick={onExit}
-              className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-black/80 transition-colors z-10"
+              className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white p-2 rounded-sm hover:bg-black/80 transition-colors z-10"
             >
               ←
             </button>
@@ -153,7 +153,7 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
           
           {/* Instructions */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-500">
-            <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+            <div className="bg-black/70 backdrop-blur-sm rounded-sm px-4 py-2 text-center">
               <p className="text-white text-sm font-medium mb-1">
                 Hold phone up high ↑
               </p>
