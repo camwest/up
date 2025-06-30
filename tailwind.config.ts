@@ -17,6 +17,12 @@ export default {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        display: ['var(--font-display)', 'sans-serif'],
+        headline: ['var(--font-headline)', 'sans-serif'],
+        body: ['var(--font-body)', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -82,10 +88,25 @@ export default {
   			glass: 'hsl(var(--glass))'
   		},
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			lg: '2px',
+  			md: '2px', 
+  			sm: '2px',
+        none: '0px'
   		},
+      textShadow: {
+        neon: '0 0 12px currentColor, 0 0 24px currentColor',
+      },
+      boxShadow: {
+        neon: '0 0 16px currentColor, 0 0 32px currentColor',
+      },
+      spacing: {
+        '1': '8px',
+        '2': '16px', 
+        '3': '24px',
+        '4': '32px',
+        '5': '40px',
+        '6': '48px',
+      },
   		animation: {
   			'pulse8': 'pulse8 600ms steps(4, end) infinite',
   			'strobe8': 'strobe8 140ms steps(2, end) infinite',
@@ -108,5 +129,8 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwindcss-textshadow")
+  ],
 } satisfies Config;

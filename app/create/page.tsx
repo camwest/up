@@ -66,9 +66,9 @@ export default function CreatePattern() {
   return (
     <main className="min-h-screen bg-background text-foreground flex flex-col">
       <nav className="w-full border-b border-border">
-        <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
-          <Link href="/" className="font-bold text-lg text-primary">
-            Concert Finder
+        <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
+          <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
+            Signal Up
           </Link>
         </div>
       </nav>
@@ -76,11 +76,11 @@ export default function CreatePattern() {
       <div className="flex-1 flex flex-col items-center px-4 py-8">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">
-              Create Your Pattern
+            <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+              Signal Generator
             </h1>
-            <p className="text-muted-foreground">
-              Generate a unique flashing pattern and share it with your friends
+            <p className="font-body text-muted-foreground">
+              Generate your unique signal pattern
             </p>
           </div>
 
@@ -228,8 +228,8 @@ export default function CreatePattern() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="text-sm text-muted-foreground">
-                    Send this link to friends so they can find you in the crowd:
+                  <div className="text-sm font-body text-muted-foreground">
+                    Share your signal with friends:
                   </div>
                   
                   <div className="flex gap-2">
@@ -256,15 +256,15 @@ export default function CreatePattern() {
                   />
                   
                   <div className="flex gap-2">
-                    <Button asChild className="flex-1">
+                    <Button asChild className="flex-1 font-headline">
                       <Link href={`/p/${generatedPattern.name}`}>
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        Test Pattern
+                        Test Signal
                       </Link>
                     </Button>
-                    <Button onClick={generatePattern} variant="outline">
+                    <Button onClick={generatePattern} variant="outline" className="font-headline">
                       <Shuffle className="w-4 h-4 mr-2" />
-                      New Pattern
+                      New Signal
                     </Button>
                   </div>
                 </div>
@@ -275,9 +275,9 @@ export default function CreatePattern() {
           <div className="text-center">
             <Link
               href="/"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors"
             >
-              ← Back to Home
+              ← Back to Signal Up
             </Link>
           </div>
         </div>

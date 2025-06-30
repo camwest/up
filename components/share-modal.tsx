@@ -92,7 +92,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
           <div className="p-6 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-primary">
+              <h2 className="text-xl font-headline font-bold text-primary">
                 Share {patternName}
               </h2>
               <button
@@ -105,7 +105,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
             {/* Message Preview */}
             <div className="space-y-3">
-              <label className="text-sm font-medium text-foreground">
+              <label className="text-sm font-headline font-medium text-foreground">
                 Share Message
               </label>
               <div className="bg-muted/30 border border-border rounded-lg p-3">
@@ -117,7 +117,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
             {/* Custom Message Input */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
+              <label className="text-sm font-headline font-medium text-foreground">
                 Custom Message (optional)
               </label>
               <textarea
@@ -134,7 +134,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
 
             {/* Quick Share Options */}
             <div className="space-y-4">
-              <h3 className="text-sm font-medium text-foreground">
+              <h3 className="text-sm font-headline font-medium text-foreground">
                 Share Options
               </h3>
               

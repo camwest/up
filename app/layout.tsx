@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Orbitron, Rajdhani, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
@@ -9,17 +9,17 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Concert Finder",
-  description: "Find your friends in the crowd with unique flashing patterns. No app required.",
-  keywords: ["concert", "friends", "finder", "crowd", "pattern", "flashing", "mobile", "webapp"],
-  authors: [{ name: "Concert Finder" }],
-  creator: "Concert Finder",
-  publisher: "Concert Finder",
+  title: "Signal Up",
+  description: "Put your signal up. Unique flashing patterns to find your friends in any crowd. No app required.",
+  keywords: ["signal", "friends", "finder", "crowd", "pattern", "flashing", "mobile", "webapp", "concert", "events"],
+  authors: [{ name: "Signal Up" }],
+  creator: "Signal Up",
+  publisher: "Signal Up",
   openGraph: {
-    title: "Concert Finder",
-    description: "Find your friends in the crowd with unique flashing patterns. No app required.",
+    title: "Signal Up",
+    description: "Put your signal up. Unique flashing patterns to find your friends in any crowd. No app required.",
     url: defaultUrl,
-    siteName: "Concert Finder",
+    siteName: "Signal Up",
     type: "website",
     locale: "en_US",
     images: [
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Concert Finder - Find your friends in the crowd",
+        alt: "Signal Up - Put your signal up and find your friends",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Concert Finder",
-    description: "Find your friends in the crowd with unique flashing patterns. No app required.",
+    title: "Signal Up",
+    description: "Put your signal up. Unique flashing patterns to find your friends in any crowd. No app required.",
     images: ["/opengraph-image.png"],
   },
   robots: {
@@ -55,9 +55,32 @@ export const metadata: Metadata = {
   },
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Signal Up Typography Stack
+const orbitron = Orbitron({
+  variable: "--font-display",
+  weight: ["900"],
   display: "swap",
+  subsets: ["latin"],
+});
+
+const rajdhani = Rajdhani({
+  variable: "--font-headline", 
+  weight: ["600", "700"],
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  weight: ["400", "700"],
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  weight: ["400"],
+  display: "swap", 
   subsets: ["latin"],
 });
 
@@ -68,7 +91,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${orbitron.variable} ${rajdhani.variable} ${inter.variable} ${jetbrainsMono.variable} font-body antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

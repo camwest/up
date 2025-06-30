@@ -78,9 +78,9 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
     return (
       <main className="min-h-screen bg-background text-foreground flex flex-col">
         <nav className="w-full border-b border-border">
-          <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
-            <Link href="/" className="font-bold text-lg text-primary">
-              Concert Finder
+          <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
+            <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
+              Signal Up
             </Link>
           </div>
         </nav>
@@ -138,9 +138,9 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
     return (
       <main className="min-h-screen bg-background text-foreground flex flex-col">
         <nav className="w-full border-b border-border">
-          <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
-            <Link href="/" className="font-bold text-lg text-primary">
-              Concert Finder
+          <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
+            <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
+              Signal Up
             </Link>
           </div>
         </nav>
@@ -151,31 +151,31 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
               <AlertCircle className="w-12 h-12 text-destructive" />
             </div>
             
-            <h1 className="text-3xl font-bold text-foreground">
-              Pattern Not Found
+            <h1 className="text-3xl font-headline font-bold text-foreground">
+              Signal Not Found
             </h1>
             
-            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-6">
-              <p className="text-sm text-muted-foreground mb-2">Invalid Pattern:</p>
-              <code className="text-destructive font-mono bg-destructive/10 px-2 py-1 rounded break-all">
+            <div className="bg-destructive/10 border border-destructive/30 rounded-sm p-4">
+              <p className="text-sm font-body text-muted-foreground mb-2">Invalid Signal:</p>
+              <code className="text-destructive font-mono bg-destructive/10 px-2 py-1 rounded-sm break-all">
                 {patternName}
               </code>
             </div>
             
-            <p className="text-muted-foreground">
-              This pattern link is invalid or malformed. Ask your friend to generate a new pattern.
+            <p className="font-body text-muted-foreground">
+              This signal link is invalid. Ask your friend to generate a new signal.
             </p>
 
             <div className="flex gap-2">
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="font-headline">
                 <Link href="/create">
-                  Create New Pattern
+                  New Signal
                 </Link>
               </Button>
-              <Button asChild>
+              <Button asChild className="font-headline">
                 <Link href="/">
                   <Home className="w-4 h-4 mr-2" />
-                  Go Home
+                  Signal Up
                 </Link>
               </Button>
             </div>
@@ -208,11 +208,11 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
       <div className="flex-1 flex flex-col items-center px-4 py-8">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-primary mb-2">
+            <h1 className="text-3xl font-headline font-bold text-primary mb-2">
               {patternName.toUpperCase()}
             </h1>
-            <p className="text-muted-foreground">
-              Hold your phone up so friends can find you
+            <p className="font-body text-muted-foreground">
+              Hold phone up high ↑
             </p>
           </div>
 
@@ -234,10 +234,10 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
           <div className="space-y-3">
             <Button 
               onClick={handleFullscreenRequest}
-              className="w-full h-12 text-lg"
+              className="w-full h-12 text-lg font-headline"
               size="lg"
             >
-              Display Pattern Full Screen
+              Put Signal Up
             </Button>
             
             <ShareButton
@@ -248,15 +248,15 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
             />
             
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="font-headline">
                 <Link href="/create">
-                  Create New Pattern
+                  New Signal
                 </Link>
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="font-headline">
                 <Link href="/">
                   <Home className="w-4 h-4 mr-1" />
-                  Home
+                  Signal Up
                 </Link>
               </Button>
             </div>
