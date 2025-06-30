@@ -1,44 +1,36 @@
-import { NextLogo } from "./next-logo";
-import { SupabaseLogo } from "./supabase-logo";
+import Link from "next/link";
 
 export function Hero() {
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
+    <div className="flex flex-col gap-8 items-center text-center px-4">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-4xl lg:text-6xl font-bold text-primary text-shadow-neon">
+          Concert Finder
+        </h1>
+        <h2 className="text-2xl lg:text-3xl font-semibold text-foreground">
+          Find Your Friends in the Crowd
+        </h2>
       </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
+      
+      <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+        Generate a unique flashing pattern and send the link to your friends. 
+        No app install required.
       </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+
+      <div className="flex flex-col gap-4 w-full max-w-md">
+        <Link
+          href="/create"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-4 px-8 text-xl rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-neon"
+        >
+          Create Pattern to Share
+        </Link>
+        
+        <p className="text-sm text-muted-foreground">
+          Hold your phone up high so friends can spot your pattern
+        </p>
+      </div>
+
+      <div className="w-full max-w-md h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent my-4" />
     </div>
   );
 }
