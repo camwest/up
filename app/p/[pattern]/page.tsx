@@ -7,6 +7,7 @@ import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, AlertCircle } from "lucide-react";
+import { useVenueContext } from "@/components/venue-context";
 
 interface PatternPageProps {
   params: Promise<{
@@ -25,6 +26,10 @@ export default function PatternDisplay({ params }: PatternPageProps) {
   // Parse the pattern from the URL
   const pattern = parsePatternName(patternName);
   const error = pattern ? null : `Invalid pattern name: ${patternName}`;
+  
+  // Venue integration using the reusable hook
+  const { collisions, VenueContextComponent } = useVenueContext(pattern || undefined, patternName);
+  
 
   // Screen Wake Lock - prevent screen timeout during pattern display
   useEffect(() => {
@@ -233,6 +238,30 @@ export default function PatternDisplay({ params }: PatternPageProps) {
               />
             </CardContent>
           </Card>
+
+          {/* Venue Integration */}
+          <VenueContextComponent />
+          
+          {/* Collision Warning - shown if there are collisions */}
+          {collisions.length > 0 && (
+            <Card>
+              <CardContent className="p-4">
+                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                    <div className="text-sm">
+                      <p className="font-medium text-amber-800 dark:text-amber-200">
+                        Pattern Conflict Detected
+                      </p>
+                      <p className="text-amber-700 dark:text-amber-300 mt-1">
+                        {collisions.length} other pattern{collisions.length !== 1 ? 's' : ''} nearby {collisions.length === 1 ? 'is' : 'are'} very similar to yours. Consider changing your pattern for better visibility.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Action Buttons */}
           <div className="space-y-3">

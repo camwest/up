@@ -9,10 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Copy, Shuffle, ExternalLink, Settings, MapPin, Users, AlertCircle } from "lucide-react";
-import { requestLocation, getLocationErrorMessage, coordinatesToVenueId, type Coordinates, type LocationResult } from "@/lib/location";
-import { getPresenceManager } from "@/lib/presence";
-import { VenueAPI } from "@/lib/venues";
+import { Copy, Shuffle, ExternalLink, Settings } from "lucide-react";
+import { useVenueContext } from "@/components/venue-context";
 
 export default function CreatePattern() {
   const [generatedPattern, setGeneratedPattern] = useState<{pattern: Pattern, name: string} | null>(null);
@@ -26,12 +24,11 @@ export default function CreatePattern() {
   const [selectedAnimation, setSelectedAnimation] = useState<string>("");
   const [selectedSpeed, setSelectedSpeed] = useState<number[]>([3]);
   
-  // Venue integration state
-  const [locationState, setLocationState] = useState<'idle' | 'requesting' | 'granted' | 'denied' | 'error'>('idle');
-  const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
-  const [venueInfo, setVenueInfo] = useState<{id: string, label?: string, userCount: number} | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
-  const [joinedVenue, setJoinedVenue] = useState(false);
+  // Venue integration using the reusable hook
+  const { VenueContextComponent } = useVenueContext(
+    generatedPattern?.pattern, 
+    generatedPattern?.name
+  );
 
   const generatePattern = useCallback(() => {
     let result;
@@ -47,87 +44,6 @@ export default function CreatePattern() {
     setGeneratedPattern(result);
     setShareUrl(`${window.location.origin}/p/${result.name}`);
   }, [colorblindMode, customMode, selectedColor, selectedAnimation, selectedSpeed]);
-  
-  // Location and venue functions
-  const requestLocationAccess = async () => {
-    setLocationState('requesting');
-    setLocationError(null);
-    
-    try {
-      const locationResult: LocationResult = await requestLocation({
-        enableHighAccuracy: false, // Privacy-first approach
-        timeout: 10000,
-        maximumAge: 300000 // 5 minutes
-      });
-      
-      if (locationResult.success && locationResult.coordinates) {
-        setUserLocation(locationResult.coordinates);
-        setLocationState('granted');
-        
-        // Get venue information
-        const venueId = coordinatesToVenueId(locationResult.coordinates);
-        await fetchVenueInfo(venueId);
-      } else {
-        setLocationState('denied');
-        setLocationError(locationResult.error || 'Location access denied');
-      }
-    } catch {
-      setLocationState('error');
-      setLocationError(getLocationErrorMessage('unknown'));
-    }
-  };
-  
-  const fetchVenueInfo = async (venueId: string) => {
-    try {
-      const response = await fetch(`/api/venues/${venueId}`);
-      if (response.ok) {
-        const venue = await response.json();
-        setVenueInfo({
-          id: venueId,
-          label: venue.label,
-          userCount: 0 // Will be updated by presence
-        });
-      } else {
-        // Venue doesn't exist yet - that's fine
-        setVenueInfo({
-          id: venueId,
-          userCount: 0
-        });
-      }
-    } catch (error) {
-      console.warn('Failed to fetch venue info:', error);
-      // Non-blocking error - venue features just won't work
-    }
-  };
-  
-  const joinVenueWithPattern = async () => {
-    if (!userLocation || !generatedPattern) return;
-    
-    try {
-      const presenceManager = getPresenceManager();
-      await presenceManager.joinVenue(
-        userLocation,
-        generatedPattern.pattern,
-        generatedPattern.name
-      );
-      
-      // Create or update venue in database
-      const createRequest = VenueAPI.prepareCreateRequest({
-        coordinates: userLocation,
-        pattern_data: generatedPattern.pattern
-      });
-      
-      await fetch(createRequest.url, {
-        method: createRequest.method,
-        headers: createRequest.headers,
-        body: createRequest.body
-      });
-      
-      setJoinedVenue(true);
-    } catch (error) {
-      console.warn('Failed to join venue:', error);
-    }
-  };
 
   useEffect(() => {
     // Generate initial pattern on load
@@ -304,83 +220,12 @@ export default function CreatePattern() {
                   pattern={generatedPattern.pattern}
                   patternName={generatedPattern.name}
                 />
-                
-                {/* Venue Integration */}
-                {locationState === 'idle' && (
-                  <div className="border-t pt-4">
-                    <div className="text-center space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Want to find others with patterns nearby?
-                      </p>
-                      <Button 
-                        onClick={requestLocationAccess}
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                      >
-                        <MapPin className="w-4 h-4 mr-2" />
-                        Enable Location Features
-                      </Button>
-                      <p className="text-xs text-muted-foreground">
-                        Your location stays private - only used to find nearby patterns
-                      </p>
-                    </div>
-                  </div>
-                )}
-                
-                {locationState === 'requesting' && (
-                  <div className="border-t pt-4 text-center">
-                    <p className="text-sm text-muted-foreground">Requesting location access...</p>
-                  </div>
-                )}
-                
-                {locationState === 'granted' && venueInfo && (
-                  <div className="border-t pt-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-primary" />
-                        <span className="text-sm font-medium">
-                          {venueInfo.label || `Area ${venueInfo.id.toUpperCase()}`}
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        {venueInfo.userCount} patterns nearby
-                      </span>
-                    </div>
-                    
-                    {!joinedVenue && (
-                      <Button 
-                        onClick={joinVenueWithPattern}
-                        size="sm"
-                        className="w-full"
-                      >
-                        <Users className="w-4 h-4 mr-2" />
-                        Join This Area
-                      </Button>
-                    )}
-                    
-                    {joinedVenue && (
-                      <div className="text-center text-sm text-green-600 dark:text-green-400">
-                        ✓ You&apos;re now visible to others in this area
-                      </div>
-                    )}
-                  </div>
-                )}
-                
-                {(locationState === 'denied' || locationState === 'error') && locationError && (
-                  <div className="border-t pt-4">
-                    <div className="flex items-start gap-2 p-3 bg-muted rounded-lg">
-                      <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-                      <div className="text-sm">
-                        <p className="font-medium">Location features unavailable</p>
-                        <p className="text-muted-foreground mt-1">{locationError}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </CardContent>
             </Card>
           )}
+
+          {/* Venue Integration */}
+          {generatedPattern && <VenueContextComponent />}
 
           {/* Share Section */}
           {shareUrl && (
@@ -408,7 +253,7 @@ export default function CreatePattern() {
                 
                 <div className="flex gap-2">
                   <Button asChild className="flex-1">
-                    <Link href={`/p/${generatedPattern?.name}${userLocation ? `?venue=${coordinatesToVenueId(userLocation)}` : ''}`}>
+                    <Link href={`/p/${generatedPattern?.name}`}>
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Test Pattern
                     </Link>
