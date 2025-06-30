@@ -1,105 +1,106 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Concert Finder
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+> Find your friends in the crowd with unique flashing patterns
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+Concert Finder is a zero-friction web app that helps people find each other in crowded venues by generating unique, shareable flashing patterns on their phones. No app install required.
 
-## Features
+## 🚀 Key Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **Zero Friction**: Click link → pattern displays immediately
+- **Real-time Coordination**: See other patterns in your area  
+- **Smart Collision Detection**: Automatically adjusts conflicting patterns
+- **Mobile-First**: Designed for phones held up in crowds
+- **Fully Anonymous**: No accounts, no tracking, patterns auto-expire
 
-## Demo
+## 🎯 How It Works
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+1. **Create**: Generate a unique flashing pattern based on your location
+2. **Share**: Send the pattern link to friends via text/messaging
+3. **Find**: Hold phones up with matching patterns to locate each other
+4. **Connect**: Real-time updates show when others join your area
 
-## Deploy to Vercel
+## 🛠 Tech Stack
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- **Frontend**: Next.js 14 (App Router) with TypeScript
+- **Database**: Supabase (Postgres + Realtime + PostGIS)
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Package Manager**: Bun
+- **Hosting**: Vercel
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+## 📋 Development Status
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+**Current Phase**: Foundation (Phase 1)
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+- [📊 GitHub Project Board](https://github.com/users/camwest/projects/1/views/1)
+- [📋 Development Issues](https://github.com/camwest/up/issues)
+- [📖 MVP Specification](./specs/mvp.md)
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Development Phases
+1. **Phase 1**: Foundation - Remove auth, create patterns, display component
+2. **Phase 2**: Core Features - Location, collision detection, real-time
+3. **Phase 3**: Polish - Sharing, venue labels, mobile/PWA
+4. **Phase 4**: Launch - Production deployment and testing
 
-## Clone and run locally
+## 🏃‍♂️ Quick Start
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### Prerequisites
+- [Bun](https://bun.sh/) installed
+- [Supabase CLI](https://supabase.com/docs/guides/cli) installed
 
-2. Create a Next.js app using the Supabase Starter template npx command
+### Local Development
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+```bash
+# Clone and install
+git clone <repo-url>
+cd up
+bun install
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+# Start local Supabase
+bun run supabase:start
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+# Generate TypeScript types
+bun run supabase:types
 
-3. Use `cd` to change into the app's directory
+# Start development server
+bun run dev
+```
 
-   ```bash
-   cd with-supabase-app
-   ```
+### Database Development
 
-4. Rename `.env.example` to `.env.local` and update the following:
+```bash
+# Run database tests
+bun run test:db
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+# Generate migration from schema changes
+bun run supabase:diff -f migration_name
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+# Reset local database
+bun run supabase:reset
+```
 
-5. You can now run the Next.js local development server:
+## 📚 Documentation
 
-   ```bash
-   npm run dev
-   ```
+- [CLAUDE.md](./CLAUDE.md) - Development notes and setup guide
+- [MVP Specification](./specs/mvp.md) - Complete product specification
+- [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment requirements
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+## 🔒 Privacy & Security
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+- **Fully anonymous** - no user accounts or personal data stored
+- **Location privacy** - only approximate geohash stored (~600m precision)
+- **Auto-expiry** - patterns automatically expire after 30 minutes
+- **No tracking** - no analytics or user behavior monitoring
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## 🚀 Deployment
 
-## Feedback and issues
+Concert Finder is designed to deploy seamlessly on Vercel with Supabase:
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+1. **Database**: Supabase with anonymous authentication enabled
+2. **Frontend**: Vercel with automatic deployments from GitHub
+3. **Real-time**: Supabase Realtime for pattern coordination
 
-## More Supabase examples
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment instructions.
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+---
+
+**Built for real-world use at concerts, festivals, and crowded events.** 🎵
