@@ -73,13 +73,13 @@ export default function CreatePattern() {
         </div>
       </nav>
 
-      <div className="flex-1 flex flex-col items-center px-4 py-8">
-        <div className="max-w-md w-full space-y-6">
+      <div className="flex-1 flex flex-col items-center px-4 py-6">
+        <div className="max-w-md w-full space-y-4">
           <div className="text-center">
-            <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+            <h1 className="text-2xl font-headline font-bold text-primary mb-1">
               Signal Generator
             </h1>
-            <p className="font-body text-muted-foreground">
+            <p className="text-sm font-body text-muted-foreground">
               Generate your unique signal pattern
             </p>
           </div>
@@ -87,9 +87,9 @@ export default function CreatePattern() {
           {/* Generation Mode Selection */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Generation Mode</CardTitle>
+              <CardTitle>Generation Mode</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               <div className="grid grid-cols-1 gap-3">
                 <Button 
                   variant={!customMode && !colorblindMode ? "default" : "outline"}
@@ -140,7 +140,7 @@ export default function CreatePattern() {
               <CardHeader>
                 <CardTitle className="text-lg">Custom Pattern</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 <div className="space-y-2">
                   <Label htmlFor="color-select">Color</Label>
                   <Select onValueChange={setSelectedColor} value={selectedColor}>
@@ -206,7 +206,7 @@ export default function CreatePattern() {
               <CardHeader>
                 <CardTitle className="text-lg">Your Pattern</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 <PatternPreview 
                   pattern={generatedPattern.pattern} 
                   className="h-32"
@@ -226,7 +226,7 @@ export default function CreatePattern() {
               <CardHeader>
                 <CardTitle className="text-lg">Share Your Pattern</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 <div className="space-y-3">
                   <div className="text-sm font-body text-muted-foreground">
                     Share your signal with friends:
