@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { parsePatternName, type Pattern } from "@/lib/patterns";
+import { parsePatternName } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
 import { ShareButton } from "@/components/share-modal";
 import { Button } from "@/components/ui/button";

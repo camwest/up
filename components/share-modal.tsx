@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { 
   ShareOptions, 
   sharePattern, 
@@ -214,7 +214,7 @@ export function ShareModal({ patternUrl, patternName, isOpen, onClose, venueName
               <p className="font-medium mb-1">💡 Pro tip:</p>
               <p>
                 Send the link to friends who need to find you, or share your pattern 
-                when you're already at the venue holding your phone up high.
+                when you&apos;re already at the venue holding your phone up high.
               </p>
             </div>
           </div>
