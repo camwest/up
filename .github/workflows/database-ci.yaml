@@ -1,0 +1,40 @@
+name: Database CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "supabase/**"
+  pull_request:
+    paths:
+      - "supabase/**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase local development setup
+        run: supabase start
+
+      - name: Run database tests
+        run: supabase test db
+
+      - name: Verify generated types are up-to-date
+        run: |
+          supabase gen types typescript --local > lib/database.types.ts
+          if [ "$(git diff --ignore-space-at-eol lib/database.types.ts | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff lib/database.types.ts
+            exit 1
+          fi

@@ -42,6 +42,31 @@ If bot abuse becomes an issue:
 - Use dynamic rendering for pages with anonymous auth
 - Ensure auth state doesn't cache across anonymous sessions
 
+## GitHub Actions Setup
+
+### Required Secrets
+
+Add these secrets to your GitHub repository settings (Settings → Secrets and variables → Actions):
+
+1. **SUPABASE_ACCESS_TOKEN**
+   - Get from: Supabase Dashboard → Account Settings → Access Tokens
+   - Create a new personal access token with appropriate permissions
+
+2. **SUPABASE_PROJECT_REF**
+   - Your project reference ID (e.g., `ltxbpzqxlajrxjrbwbej`)
+   - Found in: Supabase Dashboard → Project Settings → General
+
+3. **SUPABASE_DB_PASSWORD**
+   - Your production database password
+   - Found in: Supabase Dashboard → Project Settings → Database
+
+### GitHub Environment Protection
+
+The deploy workflow uses a `production` environment. Configure this in:
+GitHub Repository → Settings → Environments → New environment
+
+Add protection rules as needed (e.g., required reviewers for production deployments).
+
 ## Environment Variables
 
 ### Production

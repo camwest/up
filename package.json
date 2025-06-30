@@ -5,7 +5,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
     "supabase:types": "supabase gen types --lang=typescript --local > lib/database.types.ts",
+    "supabase:diff": "supabase db diff",
+    "supabase:push": "supabase db push",
+    "db:migrate": "supabase migration up",
+    "db:seed": "supabase db seed",
     "test:db": "supabase test db"
   },
   "dependencies": {
