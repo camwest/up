@@ -8,6 +8,7 @@ Concert Finder is a web app that helps people find each other in crowds by gener
 
 ## Key Documentation
 - [MVP Specification](./specs/mvp.md) - Complete product specification
+- [Core Aesthetic Guide](./docs/AESTHETIC.md) - "8-Bit Neon Signals" design system and implementation guidelines
 - [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment requirements including anonymous auth setup
 - [Concert Finder MVP](https://github.com/users/camwest/projects/1/views/1)
 - [GitHub Issues](https://github.com/camwest/up/issues) - Development roadmap with detailed acceptance criteria
