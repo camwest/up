@@ -1,7 +1,7 @@
 # Concert Finder - Claude Development Notes
 
 ## Project Overview
-Concert Finder is a web app that helps people find each other in crowds by generating unique, shareable flashing patterns on their phones. No app install required.
+Concert Finder is a web app that generates unique, shareable flashing patterns on phones. No app install required.
 
 ## Project Status & Roadmap
 
@@ -65,21 +65,14 @@ bun run supabase:types
 
 ## Key Features
 1. **Zero Friction**: No accounts, click link → display pattern
-2. **Real-time**: See other patterns in your area
-3. **Smart Collision Detection**: Automatically adjust conflicting patterns
-4. **Mobile-First**: Designed for phones held up in crowds
+2. **Pattern Generation**: Create unique flashing patterns with customization options
+3. **Mobile-First**: Designed for phones held up in crowds
+4. **Accessibility**: Colorblind-friendly options and seizure warnings
 
 ## Database Schema
-Current schema supports fully anonymous RLS policies (`USING (true)`) which is correct for the MVP's zero-friction requirement. See [supabase/schemas/001_venues.sql](./supabase/schemas/001_venues.sql).
-
-### Key Tables
-- **venues**: Location-based rooms using geohash6 (~600m precision)
-- **patterns**: Active flashing patterns with collision detection vectors
-- **venue_labels**: Crowd-sourced venue naming system
+Simplified database with no tables needed - the app works entirely with client-side pattern generation and sharing via URLs.
 
 ## Development Workflow
 1. Work on issues in phase order (Foundation → Core → Polish → Launch)
 2. Update GitHub project board status as you progress
-3. Test database changes with `bun run test:db`
-4. Generate TypeScript types after schema changes
-5. Follow existing code conventions and patterns
+3. Follow existing code conventions and patterns

@@ -1,0 +1,2 @@
+-- Empty schema for simplified Concert Finder app
+-- This file ensures we have a clean database without venue system

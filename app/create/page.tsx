@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { generateUniquePattern, createCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
+import { ShareButton } from "@/components/share-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Copy, Shuffle, ExternalLink, Settings } from "lucide-react";
-import { useVenueContext } from "@/components/venue-context";
 
 export default function CreatePattern() {
   const [generatedPattern, setGeneratedPattern] = useState<{pattern: Pattern, name: string} | null>(null);
@@ -24,11 +24,6 @@ export default function CreatePattern() {
   const [selectedAnimation, setSelectedAnimation] = useState<string>("");
   const [selectedSpeed, setSelectedSpeed] = useState<number[]>([3]);
   
-  // Venue integration using the reusable hook
-  const { VenueContextComponent } = useVenueContext(
-    generatedPattern?.pattern, 
-    generatedPattern?.name
-  );
 
   const generatePattern = useCallback(() => {
     let result;
@@ -224,18 +219,19 @@ export default function CreatePattern() {
             </Card>
           )}
 
-          {/* Venue Integration */}
-          {generatedPattern && <VenueContextComponent />}
 
           {/* Share Section */}
-          {shareUrl && (
+          {shareUrl && generatedPattern && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Share Your Pattern</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Shareable Link:</label>
+                <div className="space-y-3">
+                  <div className="text-sm text-muted-foreground">
+                    Send this link to friends so they can find you in the crowd:
+                  </div>
+                  
                   <div className="flex gap-2">
                     <code className="flex-1 text-xs bg-muted p-2 rounded border text-primary font-mono break-all">
                       {shareUrl}
@@ -251,17 +247,26 @@ export default function CreatePattern() {
                   </div>
                 </div>
                 
-                <div className="flex gap-2">
-                  <Button asChild className="flex-1">
-                    <Link href={`/p/${generatedPattern?.name}`}>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Test Pattern
-                    </Link>
-                  </Button>
-                  <Button onClick={generatePattern} variant="outline">
-                    <Shuffle className="w-4 h-4 mr-2" />
-                    New Pattern
-                  </Button>
+                <div className="grid grid-cols-1 gap-3">
+                  <ShareButton
+                    patternUrl={shareUrl}
+                    patternName={generatedPattern.name}
+                    className="w-full justify-center"
+                    variant="primary"
+                  />
+                  
+                  <div className="flex gap-2">
+                    <Button asChild className="flex-1">
+                      <Link href={`/p/${generatedPattern.name}`}>
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Test Pattern
+                      </Link>
+                    </Button>
+                    <Button onClick={generatePattern} variant="outline">
+                      <Shuffle className="w-4 h-4 mr-2" />
+                      New Pattern
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
