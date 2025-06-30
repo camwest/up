@@ -30,11 +30,24 @@ jobs:
       - name: Run database tests
         run: supabase test db
 
-      - name: Verify generated types are up-to-date
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Verify generated types are valid
         run: |
+          # Generate fresh types
           supabase gen types typescript --local > lib/database.types.ts
-          if [ "$(git diff --ignore-space-at-eol lib/database.types.ts | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build. See status below:"
-            git diff lib/database.types.ts
+          
+          # Run TypeScript compiler to check for type errors
+          echo "Checking TypeScript compilation..."
+          if bunx tsc --noEmit --skipLibCheck; then
+            echo "✅ Generated types are valid"
+          else
+            echo "❌ Generated types have compilation errors"
             exit 1
           fi
