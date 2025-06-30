@@ -93,12 +93,26 @@
     box-shadow: 0 0 16px currentColor, 0 0 32px currentColor;
   }
   
-  /* Pattern display optimizations */
+  /* Pattern display optimizations for 60fps */
   .pattern-display {
     touch-action: none;
     user-select: none;
     -webkit-touch-callout: none;
     image-rendering: pixelated;
+    
+    /* Hardware acceleration for 60fps */
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+    contain: layout style paint;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Pattern layer optimizations */
+  .pattern-layer {
+    will-change: transform, opacity;
+    contain: layout style paint;
+    transform: translate3d(0, 0, 0);
   }
   
   /* Prevent zoom on input focus */
@@ -118,8 +132,8 @@
 }
 
 @keyframes wave8 {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(100%, 0, 0); }
 }
 
 /* Reduced motion accessibility */

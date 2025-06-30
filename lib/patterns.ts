@@ -102,10 +102,10 @@ export function createCustomPattern(
   speed: number
 ): { pattern: Pattern; name: string } {
   // Validate inputs
-  if (!PATTERN_NAMES.colors.includes(colorName as any)) {
+  if (!PATTERN_NAMES.colors.includes(colorName as typeof PATTERN_NAMES.colors[number])) {
     throw new Error(`Invalid color name: ${colorName}`);
   }
-  if (!PATTERN_NAMES.animations.includes(animation.toUpperCase() as any)) {
+  if (!PATTERN_NAMES.animations.includes(animation.toUpperCase() as typeof PATTERN_NAMES.animations[number])) {
     throw new Error(`Invalid animation: ${animation}`);
   }
   if (speed < 1 || speed > 5) {
@@ -165,8 +165,8 @@ export function parsePatternName(name: string): Pattern | null {
   const [colorName, animName, numberStr] = parts;
   
   // Validate components
-  if (!PATTERN_NAMES.colors.includes(colorName as any)) return null;
-  if (!PATTERN_NAMES.animations.includes(animName as any)) return null;
+  if (!PATTERN_NAMES.colors.includes(colorName as typeof PATTERN_NAMES.colors[number])) return null;
+  if (!PATTERN_NAMES.animations.includes(animName as typeof PATTERN_NAMES.animations[number])) return null;
   
   const number = parseInt(numberStr, 10);
   if (isNaN(number) || number < 1 || number > PATTERN_NAMES.maxNumber) return null;
@@ -280,7 +280,8 @@ export function isColorblindFriendly(
   colorName: string, 
   type: keyof typeof COLORBLIND_FRIENDLY
 ): boolean {
-  return COLORBLIND_FRIENDLY[type].colors.includes(colorName as any);
+  const colors = COLORBLIND_FRIENDLY[type].colors;
+  return (colors as readonly string[]).includes(colorName);
 }
 
 // Utility functions
@@ -340,7 +341,8 @@ function hexToHsl(hex: string): { h: number; s: number; l: number } {
   
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  let h = 0, s = 0, l = (max + min) / 2;
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
   
   if (max !== min) {
     const d = max - min;

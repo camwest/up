@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState, use } from "react";
-import { parsePatternName, type Pattern } from "@/lib/patterns";
+import { useState, use, useEffect, useRef } from "react";
+import { parsePatternName } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Home, AlertCircle } from "lucide-react";
+import { Home, AlertCircle } from "lucide-react";
 
 interface PatternPageProps {
   params: Promise<{
@@ -19,10 +19,124 @@ export default function PatternDisplay({ params }: PatternPageProps) {
   const patternName = resolvedParams.pattern;
   
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showStrobeWarning, setShowStrobeWarning] = useState(false);
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   
   // Parse the pattern from the URL
   const pattern = parsePatternName(patternName);
   const error = pattern ? null : `Invalid pattern name: ${patternName}`;
+
+  // Screen Wake Lock - prevent screen timeout during pattern display
+  useEffect(() => {
+    if (isFullscreen) {
+      const requestWakeLock = async () => {
+        try {
+          if ('wakeLock' in navigator) {
+            wakeLockRef.current = await navigator.wakeLock.request('screen');
+            console.log('Screen wake lock activated');
+          }
+        } catch (error) {
+          console.warn('Wake lock failed:', error);
+        }
+      };
+      
+      requestWakeLock();
+    } else {
+      // Release wake lock when exiting fullscreen
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release();
+        wakeLockRef.current = null;
+        console.log('Screen wake lock released');
+      }
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release();
+        wakeLockRef.current = null;
+      }
+    };
+  }, [isFullscreen]);
+
+  // Handle fullscreen activation with strobe warning
+  const handleFullscreenRequest = () => {
+    if (pattern?.animation === 'strobe') {
+      setShowStrobeWarning(true);
+    } else {
+      setIsFullscreen(true);
+    }
+  };
+
+  const handleStrobeWarningAccept = () => {
+    setShowStrobeWarning(false);
+    setIsFullscreen(true);
+  };
+
+  const handleStrobeWarningCancel = () => {
+    setShowStrobeWarning(false);
+  };
+
+  // Strobe Warning Dialog
+  if (showStrobeWarning && pattern) {
+    return (
+      <main className="min-h-screen bg-background text-foreground flex flex-col">
+        <nav className="w-full border-b border-border">
+          <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
+            <Link href="/" className="font-bold text-lg text-primary">
+              Concert Finder
+            </Link>
+          </div>
+        </nav>
+
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+          <div className="max-w-md w-full">
+            <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <AlertCircle className="w-8 h-8 text-amber-600" />
+                  <h2 className="text-xl font-bold text-amber-800 dark:text-amber-200">
+                    Seizure Warning
+                  </h2>
+                </div>
+                
+                <div className="space-y-3 text-sm text-amber-800 dark:text-amber-200">
+                  <p className="font-medium">
+                    This pattern contains <strong>strobe effects</strong> that flash rapidly at speed {pattern.speed}.
+                  </p>
+                  
+                  <p>
+                    Strobe effects may trigger seizures in individuals with photosensitive epilepsy. 
+                    Please consider your health conditions before proceeding.
+                  </p>
+                  
+                  <p className="text-xs">
+                    If you experience dizziness, nausea, or discomfort, exit immediately.
+                  </p>
+                </div>
+
+                <div className="flex gap-2 pt-4">
+                  <Button 
+                    onClick={handleStrobeWarningCancel}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleStrobeWarningAccept}
+                    className="flex-1 bg-amber-600 hover:bg-amber-700"
+                  >
+                    I Understand, Continue
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   if (error || !pattern) {
     return (
@@ -77,17 +191,11 @@ export default function PatternDisplay({ params }: PatternPageProps) {
 
   if (isFullscreen) {
     return (
-      <div className="relative">
-        <PatternPreview pattern={pattern} fullscreen />
-        
-        {/* Exit fullscreen button */}
-        <button
-          onClick={() => setIsFullscreen(false)}
-          className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white p-2 rounded-lg hover:bg-black/80 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-      </div>
+      <PatternPreview 
+        pattern={pattern} 
+        fullscreen 
+        onExit={() => setIsFullscreen(false)}
+      />
     );
   }
 
@@ -129,7 +237,7 @@ export default function PatternDisplay({ params }: PatternPageProps) {
           {/* Action Buttons */}
           <div className="space-y-3">
             <Button 
-              onClick={() => setIsFullscreen(true)}
+              onClick={handleFullscreenRequest}
               className="w-full h-12 text-lg"
               size="lg"
             >

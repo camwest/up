@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { generateUniquePattern, createCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
 import { Button } from "@/components/ui/button";
@@ -23,13 +23,7 @@ export default function CreatePattern() {
   const [selectedAnimation, setSelectedAnimation] = useState<string>("");
   const [selectedSpeed, setSelectedSpeed] = useState<number[]>([3]);
 
-  useEffect(() => {
-    // Generate initial pattern on load
-    generatePattern();
-  }, []);
-
-
-  const generatePattern = () => {
+  const generatePattern = useCallback(() => {
     let result;
     
     if (colorblindMode) {
@@ -42,14 +36,19 @@ export default function CreatePattern() {
     
     setGeneratedPattern(result);
     setShareUrl(`${window.location.origin}/p/${result.name}`);
-  };
+  }, [colorblindMode, customMode, selectedColor, selectedAnimation, selectedSpeed]);
+
+  useEffect(() => {
+    // Generate initial pattern on load
+    generatePattern();
+  }, [generatePattern]);
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
-    } catch (error) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = shareUrl;

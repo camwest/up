@@ -8,6 +8,13 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Dynamic animation classes for pattern display
+    'animate-pulse8',
+    'animate-strobe8', 
+    'animate-wave8',
+    'animate-fade8'
+  ],
   theme: {
   	extend: {
   		colors: {
@@ -78,6 +85,26 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'pulse8': 'pulse8 600ms steps(4, end) infinite',
+  			'strobe8': 'strobe8 140ms steps(2, end) infinite',
+  			'wave8': 'wave8 1200ms steps(8, end) infinite',
+  			'fade8': 'pulse8 600ms steps(4, end) infinite', // Use pulse keyframes for fade
+  		},
+  		keyframes: {
+  			pulse8: {
+  				'0%, 100%': { opacity: '0.25' },
+  				'50%': { opacity: '1' }
+  			},
+  			strobe8: {
+  				'0%': { opacity: '1' },
+  				'50%': { opacity: '0' }
+  			},
+  			wave8: {
+  				'0%': { transform: 'translateX(-100%)' },
+  				'100%': { transform: 'translateX(100%)' }
+  			}
   		}
   	}
   },
