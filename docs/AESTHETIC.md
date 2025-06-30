@@ -215,14 +215,25 @@ input, select, textarea {
 
 ## Brand Voice
 
+**Core Tagline:** "Put your signal up"
+
 **UI Copy Style:**
-- "Hold phone up high ↑"
+- "Put your signal up ↑"
+- "Signal up and glow on"
+- "Keep your signal up"
 - "Pattern locked ⚡"
 - "Broadcasting signal"
-- "Synced ✓"
+- "Signal synced ✓"
+- "Hold phone up high ↑"
 - "Glow on."
 
-**Tone:** Direct, tech-inspired, minimal. Every word serves visibility or guidance.
+**Call-to-Action Examples:**
+- "Signal up now"
+- "Put signal up"
+- "Get your signal up"
+- "Signal up to connect"
+
+**Tone:** Direct, tech-inspired, minimal. Every word serves visibility or guidance. The "signal up" concept reinforces both the physical action (holding phone up) and the digital broadcasting.
 
 ---
 
