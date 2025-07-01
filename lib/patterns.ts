@@ -116,9 +116,13 @@ export function createCustomPattern(
   const colorData = COLOR_PALETTE[colorName as keyof typeof COLOR_PALETTE];
   const primary = hslToHex(colorData.h, colorData.s, colorData.l);
   
-  // Generate secondary color (30% chance)
+  // Generate secondary color deterministically based on inputs
   let secondary: string | undefined;
-  if (Math.random() < 0.3) {
+  const colorIndex = PATTERN_NAMES.colors.indexOf(colorName as (typeof PATTERN_NAMES.colors)[number]);
+  const animIndex = PATTERN_NAMES.animations.indexOf(animation.toUpperCase() as (typeof PATTERN_NAMES.animations)[number]);
+  const hash = (colorIndex + animIndex + speed) % 10;
+  
+  if (hash < 3) { // Deterministic 30% chance
     const complementH = (colorData.h + 180) % 360;
     secondary = hslToHex(complementH, colorData.s * 0.8, colorData.l * 0.9);
   }
@@ -130,9 +134,61 @@ export function createCustomPattern(
     speed
   };
   
-  // Generate name with custom number
-  const number = Math.floor(Math.random() * PATTERN_NAMES.maxNumber) + 1;
+  // Generate name with deterministic number
+  const number = ((colorIndex * 7 + animIndex * 3 + speed) % PATTERN_NAMES.maxNumber) + 1;
   const name = `${colorName}-${animation.toUpperCase()}-${number.toString().padStart(2, '0')}`;
+  
+  return { pattern, name };
+}
+
+/**
+ * Create a truly custom pattern with full user control (no randomness)
+ */
+export function createTrueCustomPattern(
+  primaryColorName: string,
+  secondaryColorName: string,
+  animation: string,
+  speed: number
+): { pattern: Pattern; name: string } {
+  // Validate inputs
+  if (!PATTERN_NAMES.colors.includes(primaryColorName as typeof PATTERN_NAMES.colors[number])) {
+    throw new Error(`Invalid primary color name: ${primaryColorName}`);
+  }
+  if (secondaryColorName && !PATTERN_NAMES.colors.includes(secondaryColorName as typeof PATTERN_NAMES.colors[number])) {
+    throw new Error(`Invalid secondary color name: ${secondaryColorName}`);
+  }
+  if (!PATTERN_NAMES.animations.includes(animation.toUpperCase() as typeof PATTERN_NAMES.animations[number])) {
+    throw new Error(`Invalid animation: ${animation}`);
+  }
+  if (speed < 1 || speed > 5) {
+    throw new Error(`Invalid speed: ${speed}. Must be 1-5`);
+  }
+
+  // Get primary color from palette
+  const primaryColorData = COLOR_PALETTE[primaryColorName as keyof typeof COLOR_PALETTE];
+  const primary = hslToHex(primaryColorData.h, primaryColorData.s, primaryColorData.l);
+  
+  // Get secondary color if specified
+  let secondary: string | undefined;
+  if (secondaryColorName) {
+    const secondaryColorData = COLOR_PALETTE[secondaryColorName as keyof typeof COLOR_PALETTE];
+    secondary = hslToHex(secondaryColorData.h, secondaryColorData.s, secondaryColorData.l);
+  }
+  
+  const pattern: Pattern = {
+    primary,
+    secondary,
+    animation: animation.toLowerCase() as Pattern['animation'],
+    speed
+  };
+  
+  // Generate deterministic name based on selections
+  const primaryIndex = PATTERN_NAMES.colors.indexOf(primaryColorName as (typeof PATTERN_NAMES.colors)[number]);
+  const secondaryIndex = secondaryColorName ? PATTERN_NAMES.colors.indexOf(secondaryColorName as (typeof PATTERN_NAMES.colors)[number]) : 0;
+  const animIndex = PATTERN_NAMES.animations.indexOf(animation.toUpperCase() as (typeof PATTERN_NAMES.animations)[number]);
+  const number = ((primaryIndex * 11 + secondaryIndex * 7 + animIndex * 3 + speed) % PATTERN_NAMES.maxNumber) + 1;
+  
+  const name = `${primaryColorName}-${animation.toUpperCase()}-${number.toString().padStart(2, '0')}`;
   
   return { pattern, name };
 }

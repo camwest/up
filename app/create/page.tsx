@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { generateUniquePattern, createCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
+import { generateUniquePattern, createTrueCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
 import { ShareButton } from "@/components/share-modal";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Copy, Shuffle, ExternalLink, Settings } from "lucide-react";
+import { Copy, Shuffle, ExternalLink, Settings, ArrowLeft, Share2, ChevronDown } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function CreatePattern() {
   const [generatedPattern, setGeneratedPattern] = useState<{pattern: Pattern, name: string} | null>(null);
@@ -21,6 +21,7 @@ export default function CreatePattern() {
   
   // Manual customization state
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSecondaryColor, setSelectedSecondaryColor] = useState<string>("none");
   const [selectedAnimation, setSelectedAnimation] = useState<string>("");
   const [selectedSpeed, setSelectedSpeed] = useState<number[]>([3]);
   
@@ -31,14 +32,14 @@ export default function CreatePattern() {
     if (colorblindMode) {
       result = generateColorblindFriendlyPattern(colorblindMode);
     } else if (customMode && selectedColor && selectedAnimation) {
-      result = createCustomPattern(selectedColor, selectedAnimation, selectedSpeed[0]);
+      result = createTrueCustomPattern(selectedColor, selectedSecondaryColor === "none" ? "" : selectedSecondaryColor, selectedAnimation, selectedSpeed[0]);
     } else {
       result = generateUniquePattern();
     }
     
     setGeneratedPattern(result);
     setShareUrl(`${window.location.origin}/p/${result.name}`);
-  }, [colorblindMode, customMode, selectedColor, selectedAnimation, selectedSpeed]);
+  }, [colorblindMode, customMode, selectedColor, selectedSecondaryColor, selectedAnimation, selectedSpeed]);
 
   useEffect(() => {
     // Generate initial pattern on load
@@ -64,221 +65,253 @@ export default function CreatePattern() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col">
-      <nav className="w-full border-b border-border">
-        <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
-          <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
-            Signal Up
-          </Link>
+    <main className="min-h-screen relative overflow-hidden">
+      {/* Fullscreen Pattern Background */}
+      {generatedPattern && (
+        <div className="absolute inset-0 z-0">
+          <PatternPreview 
+            pattern={generatedPattern.pattern}
+            className="w-full h-full"
+          />
         </div>
-      </nav>
-
-      <div className="flex-1 flex flex-col items-center px-4 py-6">
-        <div className="max-w-md w-full space-y-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-headline font-bold text-primary mb-1">
-              Signal Generator
-            </h1>
-            <p className="text-sm font-body text-muted-foreground">
-              Generate your unique signal pattern
-            </p>
-          </div>
-
-          {/* Generation Mode Selection */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Generation Mode</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid grid-cols-1 gap-3">
-                <Button 
-                  variant={!customMode && !colorblindMode ? "default" : "outline"}
-                  onClick={() => { setCustomMode(false); setColorblindMode(null); generatePattern(); }}
-                  className="w-full"
-                >
-                  <Shuffle className="w-4 h-4 mr-2" />
-                  Random Generation
-                </Button>
-                
-                <Button 
-                  variant={customMode ? "default" : "outline"}
-                  onClick={() => { setCustomMode(!customMode); setColorblindMode(null); }}
-                  className="w-full"
-                >
-                  <Settings className="w-4 h-4 mr-2" />
-                  Manual Customization
-                </Button>
-              </div>
-              
-              {/* Colorblind-friendly options */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Accessibility Options:</Label>
-                <div className="grid grid-cols-1 gap-2">
-                  {Object.entries(COLORBLIND_FRIENDLY).map(([type, config]) => (
-                    <Button
-                      key={type}
-                      variant={colorblindMode === type ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => {
-                        setColorblindMode(colorblindMode === type ? null : type as keyof typeof COLORBLIND_FRIENDLY);
-                        setCustomMode(false);
-                        setTimeout(generatePattern, 100);
-                      }}
-                      className="text-xs"
-                    >
-                      {config.description}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Manual Customization Panel */}
-          {customMode && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Custom Pattern</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <Label htmlFor="color-select">Color</Label>
-                  <Select onValueChange={setSelectedColor} value={selectedColor}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a color" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PATTERN_NAMES.colors.map((color) => (
-                        <SelectItem key={color} value={color}>
-                          {color}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="animation-select">Animation</Label>
-                  <Select onValueChange={setSelectedAnimation} value={selectedAnimation}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select an animation" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PATTERN_NAMES.animations.map((animation) => (
-                        <SelectItem key={animation} value={animation}>
-                          {animation}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="speed-slider">Speed: {selectedSpeed[0]}</Label>
-                  <Slider
-                    value={selectedSpeed}
-                    onValueChange={setSelectedSpeed}
-                    max={5}
-                    min={1}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Slow</span>
-                    <span>Fast</span>
-                  </div>
-                </div>
-
-                <Button 
-                  onClick={generatePattern}
-                  disabled={!selectedColor || !selectedAnimation}
-                  className="w-full"
-                >
-                  Generate Custom Pattern
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Pattern Preview */}
-          {generatedPattern && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Your Pattern</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <PatternPreview 
-                  pattern={generatedPattern.pattern} 
-                  className="h-32"
-                />
-                <PatternInfo 
-                  pattern={generatedPattern.pattern}
-                  patternName={generatedPattern.name}
-                />
-              </CardContent>
-            </Card>
-          )}
-
-
-          {/* Share Section */}
+      )}
+      
+      {/* Dark Overlay for Readability */}
+      <div className="absolute inset-0 bg-background/80 z-10" />
+      
+      {/* Floating Controls */}
+      <div className="relative z-20 min-h-screen flex flex-col">
+        {/* Top Navigation */}
+        <div className="flex items-center justify-between p-4">
+          <Button variant="ghost" size="sm" asChild className="text-foreground/80 hover:text-foreground">
+            <Link href="/">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Signal Up
+            </Link>
+          </Button>
+          
           {shareUrl && generatedPattern && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Share Your Pattern</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="text-foreground/80 hover:text-foreground">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80" align="end">
                 <div className="space-y-3">
-                  <div className="text-sm font-body text-muted-foreground">
-                    Share your signal with friends:
+                  <div className="space-y-2">
+                    <h4 className="font-headline font-semibold text-sm">Share Signal</h4>
+                    <div className="flex gap-2">
+                      <code className="flex-1 text-xs bg-muted p-2 rounded text-primary font-mono break-all">
+                        {shareUrl}
+                      </code>
+                      <Button 
+                        onClick={copyToClipboard}
+                        size="sm"
+                        variant="outline"
+                        className="shrink-0"
+                      >
+                        {copySuccess ? "Copied!" : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
                   </div>
                   
-                  <div className="flex gap-2">
-                    <code className="flex-1 text-xs bg-muted p-2 rounded border text-primary font-mono break-all">
-                      {shareUrl}
-                    </code>
-                    <Button 
-                      onClick={copyToClipboard}
-                      size="sm"
-                      variant="outline"
-                      className="shrink-0"
-                    >
-                      {copySuccess ? "Copied!" : <Copy className="w-4 h-4" />}
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-3">
-                  <ShareButton
-                    patternUrl={shareUrl}
-                    patternName={generatedPattern.name}
-                    className="w-full justify-center"
-                    variant="primary"
-                  />
-                  
-                  <div className="flex gap-2">
-                    <Button asChild className="flex-1 font-headline">
+                  <div className="space-y-2">
+                    <ShareButton
+                      patternUrl={shareUrl}
+                      patternName={generatedPattern.name}
+                      className="w-full justify-center"
+                      variant="primary"
+                    />
+                    
+                    <Button asChild className="w-full font-headline" variant="outline">
                       <Link href={`/p/${generatedPattern.name}`}>
                         <ExternalLink className="w-4 h-4 mr-2" />
                         Test Signal
                       </Link>
                     </Button>
-                    <Button onClick={generatePattern} variant="outline" className="font-headline">
-                      <Shuffle className="w-4 h-4 mr-2" />
-                      New Signal
-                    </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </PopoverContent>
+            </Popover>
           )}
-
-          <div className="text-center">
-            <Link
-              href="/"
-              className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors"
+        </div>
+        
+        {/* Center Content - Pattern Info */}
+        <div className="flex-1 flex items-center justify-center px-4">
+          {generatedPattern && (
+            <div className="text-center space-y-2">
+              <div className="bg-background/90 backdrop-blur-sm rounded-sm border p-4 max-w-sm">
+                <PatternInfo 
+                  pattern={generatedPattern.pattern}
+                  patternName={generatedPattern.name}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Bottom Floating Controls */}
+        <div className="p-4 space-y-3">
+          {/* Quick Actions */}
+          <div className="flex gap-2 justify-center">
+            <Button 
+              onClick={generatePattern}
+              className="font-headline shadow-neon"
             >
-              ← Back to Signal Up
-            </Link>
+              <Shuffle className="w-4 h-4 mr-2" />
+              New Signal
+            </Button>
+          </div>
+          
+          {/* Generation Mode Popover */}
+          <div className="max-w-sm mx-auto">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-background/90 backdrop-blur-sm border font-headline"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Generation Options
+                  <ChevronDown className="w-4 h-4 ml-auto" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 bg-background/95 backdrop-blur-sm border p-2">
+                <div className="space-y-2">
+                  {/* Mode Selection */}
+                  <div className="grid grid-cols-2 gap-1">
+                    <Button 
+                      variant={!customMode && !colorblindMode ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => { setCustomMode(false); setColorblindMode(null); generatePattern(); }}
+                      className="text-xs font-headline h-8"
+                    >
+                      <Shuffle className="w-3 h-3 mr-1" />
+                      Random
+                    </Button>
+                    
+                    <Button 
+                      variant={customMode ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => { 
+                        const newCustomMode = !customMode;
+                        setCustomMode(newCustomMode);
+                        setColorblindMode(null);
+                        // Set defaults when entering custom mode
+                        if (newCustomMode) {
+                          if (!selectedColor) setSelectedColor(PATTERN_NAMES.colors[0]);
+                          if (!selectedAnimation) setSelectedAnimation(PATTERN_NAMES.animations[0]);
+                        }
+                      }}
+                      className="text-xs font-headline h-8"
+                    >
+                      <Settings className="w-3 h-3 mr-1" />
+                      Custom
+                    </Button>
+                  </div>
+                  
+                  {/* Accessibility Select - Only show when not in Custom mode */}
+                  {!customMode && (
+                    <div className="space-y-1">
+                      <Label className="text-xs font-medium">Accessibility</Label>
+                      <Select 
+                        value={colorblindMode || "none"} 
+                        onValueChange={(value) => {
+                          const newMode = value === "none" ? null : value as keyof typeof COLORBLIND_FRIENDLY;
+                          setColorblindMode(newMode);
+                          setTimeout(generatePattern, 100);
+                        }}
+                      >
+                        <SelectTrigger className="h-7 text-xs">
+                          <SelectValue placeholder="None" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none" className="text-xs">None</SelectItem>
+                          {Object.entries(COLORBLIND_FRIENDLY).map(([type, config]) => (
+                            <SelectItem key={type} value={type} className="text-xs">
+                              {config.description.replace("Optimized for ", "").replace(" users", "")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                  
+                  {/* Custom Controls - Compact */}
+                  {customMode && (
+                    <div className="space-y-1 pt-1 border-t">
+                      <div className="grid grid-cols-2 gap-1">
+                        <div>
+                          <Label className="text-xs font-medium">Primary</Label>
+                          <Select onValueChange={setSelectedColor} value={selectedColor}>
+                            <SelectTrigger className="h-7 text-xs">
+                              <SelectValue placeholder="Primary" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {PATTERN_NAMES.colors.map((color) => (
+                                <SelectItem key={color} value={color} className="text-xs">
+                                  {color}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label className="text-xs font-medium">Secondary</Label>
+                          <Select onValueChange={setSelectedSecondaryColor} value={selectedSecondaryColor}>
+                            <SelectTrigger className="h-7 text-xs">
+                              <SelectValue placeholder="None" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none" className="text-xs">None</SelectItem>
+                              {PATTERN_NAMES.colors.map((color) => (
+                                <SelectItem key={color} value={color} className="text-xs">
+                                  {color}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-1">
+                        <div>
+                          <Label className="text-xs font-medium">Animation</Label>
+                          <Select onValueChange={setSelectedAnimation} value={selectedAnimation}>
+                            <SelectTrigger className="h-7 text-xs">
+                              <SelectValue placeholder="Anim" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {PATTERN_NAMES.animations.map((animation) => (
+                                <SelectItem key={animation} value={animation} className="text-xs">
+                                  {animation}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label className="text-xs font-medium">Speed: {selectedSpeed[0]}</Label>
+                          <Slider
+                            value={selectedSpeed}
+                            onValueChange={setSelectedSpeed}
+                            max={5}
+                            min={1}
+                            step={1}
+                            className="w-full h-4 mt-1"
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
