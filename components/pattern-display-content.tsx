@@ -114,20 +114,20 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
     return (
       <main className="min-h-dvh bg-background text-foreground flex flex-col">
         <nav className="w-full border-b border-border">
-          <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
+          <div className="max-w-4xl mx-auto flex justify-between items-center p-2">
             <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
               Signal Up
             </Link>
           </div>
         </nav>
 
-        <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-2 py-4">
           <div className="max-w-md w-full">
             <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3 mb-4">
-                  <AlertCircle className="w-8 h-8 text-amber-600" />
-                  <h2 className="text-xl font-bold text-amber-800 dark:text-amber-200">
+              <CardContent className="p-3 space-y-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="w-6 h-6 text-amber-600" />
+                  <h2 className="text-lg font-bold text-amber-800 dark:text-amber-200">
                     Seizure Warning
                   </h2>
                 </div>
@@ -147,17 +147,17 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
                   </p>
                 </div>
 
-                <div className="flex gap-2 pt-4">
+                <div className="flex gap-2 pt-2">
                   <Button 
                     onClick={handleStrobeWarningCancel}
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 text-xs"
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={handleStrobeWarningAccept}
-                    className="flex-1 bg-amber-600 hover:bg-amber-700"
+                    className="flex-1 bg-amber-600 hover:bg-amber-700 text-xs"
                   >
                     I Understand, Continue
                   </Button>
