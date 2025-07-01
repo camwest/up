@@ -180,9 +180,6 @@ export function PatternInfo({ pattern, patternName }: PatternInfoProps) {
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-primary mb-2">
-          {patternName}
-        </h2>
         <p className="text-muted-foreground">
           {pattern.animation.charAt(0).toUpperCase() + pattern.animation.slice(1)} pattern at speed {pattern.speed}
         </p>

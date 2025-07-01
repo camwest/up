@@ -14,9 +14,11 @@ interface PatternDisplayContentProps {
 }
 
 export function PatternDisplayContent({ patternName }: PatternDisplayContentProps) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true); // Show controls initially
+  const [showInstructions, setShowInstructions] = useState(true); // Show "hold up high" initially
   const [showStrobeWarning, setShowStrobeWarning] = useState(false);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Parse the pattern from the URL
   const pattern = parsePatternName(patternName);
@@ -24,27 +26,18 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
 
   // Screen Wake Lock - prevent screen timeout during pattern display
   useEffect(() => {
-    if (isFullscreen) {
-      const requestWakeLock = async () => {
-        try {
-          if ('wakeLock' in navigator) {
-            wakeLockRef.current = await navigator.wakeLock.request('screen');
-            console.log('Screen wake lock activated');
-          }
-        } catch (error) {
-          console.warn('Wake lock failed:', error);
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLockRef.current = await navigator.wakeLock.request('screen');
+          console.log('Screen wake lock activated');
         }
-      };
-      
-      requestWakeLock();
-    } else {
-      // Release wake lock when exiting fullscreen
-      if (wakeLockRef.current) {
-        wakeLockRef.current.release();
-        wakeLockRef.current = null;
-        console.log('Screen wake lock released');
+      } catch (error) {
+        console.warn('Wake lock failed:', error);
       }
-    }
+    };
+    
+    requestWakeLock();
 
     // Cleanup on unmount
     return () => {
@@ -53,25 +46,61 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
         wakeLockRef.current = null;
       }
     };
-  }, [isFullscreen]);
+  }, []);
 
-  // Handle fullscreen activation with strobe warning
-  const handleFullscreenRequest = () => {
-    if (pattern?.animation === 'strobe') {
-      setShowStrobeWarning(true);
-    } else {
-      setIsFullscreen(true);
+  // Auto-fade controls and instructions
+  useEffect(() => {
+    // Fade out instructions after 3 seconds
+    const instructionsTimer = setTimeout(() => {
+      setShowInstructions(false);
+    }, 3000);
+
+    // Fade out controls after 5 seconds
+    const controlsTimer = setTimeout(() => {
+      setShowControls(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(instructionsTimer);
+      clearTimeout(controlsTimer);
+    };
+  }, []);
+
+  // Reset auto-fade timer when user interacts
+  const resetControlsTimer = () => {
+    setShowControls(true);
+    
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
     }
+    
+    controlsTimeoutRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, 3000); // Fade out after 3 seconds of inactivity
   };
 
+  // Handle tap to show controls
+  const handleContainerTap = () => {
+    resetControlsTimer();
+  };
+
+  // Handle strobe warning if needed
   const handleStrobeWarningAccept = () => {
     setShowStrobeWarning(false);
-    setIsFullscreen(true);
   };
 
   const handleStrobeWarningCancel = () => {
     setShowStrobeWarning(false);
+    // Exit to home since we don't have a non-fullscreen state
+    window.location.href = '/';
   };
+
+  // Check for strobe warning on mount
+  useEffect(() => {
+    if (pattern?.animation === 'strobe') {
+      setShowStrobeWarning(true);
+    }
+  }, [pattern]);
 
   // Strobe Warning Dialog
   if (showStrobeWarning && pattern) {
@@ -185,82 +214,59 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
     );
   }
 
-  if (isFullscreen) {
-    return (
-      <PatternPreview 
-        pattern={pattern} 
-        fullscreen 
-        onExit={() => setIsFullscreen(false)}
-      />
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col">
-      <nav className="w-full border-b border-border">
-        <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
-          <Link href="/" className="font-bold text-lg text-primary">
-            Concert Finder
-          </Link>
-        </div>
-      </nav>
-
-      <div className="flex-1 flex flex-col items-center px-4 py-8">
-        <div className="max-w-md w-full space-y-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-headline font-bold text-primary mb-2">
-              {patternName.toUpperCase()}
-            </h1>
-            <p className="font-body text-muted-foreground">
-              Hold phone up high ↑
-            </p>
-          </div>
-
-          {/* Pattern Preview Card */}
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <PatternPreview 
-                pattern={pattern} 
-                className="h-48"
-              />
-              <PatternInfo 
-                pattern={pattern}
-                patternName={patternName.toUpperCase()}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Action Buttons */}
-          <div className="space-y-3">
-            <Button 
-              onClick={handleFullscreenRequest}
-              className="w-full h-12 text-lg font-headline"
-              size="lg"
-            >
-              Put Signal Up
+    <main 
+      className="min-h-screen relative overflow-hidden cursor-pointer" 
+      onClick={handleContainerTap}
+    >
+      {/* Fullscreen Pattern Background */}
+      <div className="absolute inset-0 z-0">
+        <PatternPreview 
+          pattern={pattern}
+          className="w-full h-full"
+          fullscreen
+        />
+      </div>
+      
+      {/* Floating Controls with Fade Animation */}
+      {showControls && (
+        <div className="absolute inset-0 z-10 transition-opacity duration-500 opacity-100">
+        
+        {/* Dark Overlay for Readability */}
+        <div className="absolute inset-0 bg-background/60" />
+        
+        <div className="relative z-20 min-h-screen flex flex-col">
+          {/* Top Navigation */}
+          <div className="flex items-center justify-between p-4">
+            <Button variant="outline" asChild className="font-headline bg-background/90 backdrop-blur-sm">
+              <Link href="/create">
+                New Signal
+              </Link>
             </Button>
             
             <ShareButton
               patternUrl={typeof window !== 'undefined' ? window.location.href : ''}
               patternName={patternName.toUpperCase()}
-              className="w-full"
-              variant="secondary"
+              variant="outline"
+              size="sm"
+              className="text-foreground hover:text-foreground bg-background/80 backdrop-blur-sm"
             />
-            
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" asChild className="font-headline">
-                <Link href="/create">
-                  New Signal
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="font-headline">
-                <Link href="/">
-                  <Home className="w-4 h-4 mr-1" />
-                  Signal Up
-                </Link>
-              </Button>
-            </div>
           </div>
+          
+        </div>
+        </div>
+      )}
+
+      {/* Instructions Overlay with Fade Animation */}
+      <div 
+        className={`absolute inset-0 z-15 flex items-end justify-center pb-20 pointer-events-none transition-opacity duration-1000 ${
+          showInstructions ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div className="bg-background/90 backdrop-blur-sm rounded-sm border px-4 py-2">
+          <p className="text-sm font-body text-foreground text-center">
+            Hold phone up high ↑
+          </p>
         </div>
       </div>
     </main>
