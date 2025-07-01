@@ -83,6 +83,19 @@
   .animate-wave8 {
     animation: wave8 1200ms steps(8, end) infinite;
   }
+
+  /* Animation preview variants for selects */
+  .animate-preview-pulse {
+    animation: pulse8 600ms steps(4, end) infinite;
+  }
+  
+  .animate-preview-strobe {
+    animation: strobe8 200ms steps(2, end) infinite;
+  }
+  
+  .animate-preview-wave {
+    animation: wave8 1000ms steps(6, end) infinite;
+  }
   
   /* Neon glow effects */
   .text-shadow-neon {
