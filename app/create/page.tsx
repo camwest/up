@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { generateUniquePattern, createTrueCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
-import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { createTrueCustomPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
+import { PatternPreview } from "@/components/pattern-preview";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,6 +21,14 @@ export default function CreatePattern() {
   const [selectedAnimation, setSelectedAnimation] = useState<string>("PULSE");
   const [selectedSpeed, setSelectedSpeed] = useState<number[]>([3]);
   
+  // Simplified unique colors (one per actual color family)
+  const uniqueColors = useMemo(() => [
+    { name: 'NEON', color: '#FF008C' },   // Magenta family
+    { name: 'TRON', color: '#00F9FF' },   // Cyan family  
+    { name: 'ACID', color: '#B4FF11' },   // Lime family
+    { name: 'GOLD', color: '#FFBF00' },   // Amber family
+    { name: 'VOID', color: '#8B00FF' }    // Violet family
+  ], []);
 
   const generatePattern = useCallback(() => {
     // Use random variations from the same color family for pattern names
@@ -43,7 +51,7 @@ export default function CreatePattern() {
     setSelectedSecondaryColor(randomSecondary);
     setSelectedAnimation(randomAnimation);
     setSelectedSpeed([randomSpeed]);
-  }, []);
+  }, [uniqueColors]);
 
   const applyAccessibilityMode = useCallback((mode: keyof typeof COLORBLIND_FRIENDLY) => {
     // Set form inputs based on accessibility mode
@@ -61,15 +69,6 @@ export default function CreatePattern() {
     setSelectedAnimation(randomAnimation);
     setSelectedSpeed([randomSpeed]);
   }, []);
-
-  // Simplified unique colors (one per actual color family)
-  const uniqueColors = [
-    { name: 'NEON', color: '#FF008C' },   // Magenta family
-    { name: 'TRON', color: '#00F9FF' },   // Cyan family  
-    { name: 'ACID', color: '#B4FF11' },   // Lime family
-    { name: 'GOLD', color: '#FFBF00' },   // Amber family
-    { name: 'VOID', color: '#8B00FF' }    // Violet family
-  ];
 
   // Helper function to get hex color from color name
   const getColorHex = (colorName: string): string => {

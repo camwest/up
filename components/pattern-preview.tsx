@@ -226,7 +226,7 @@ interface PatternInfoProps {
   patternName: string;
 }
 
-export function PatternInfo({ pattern, patternName }: PatternInfoProps) {
+export function PatternInfo({ pattern }: PatternInfoProps) {
   return (
     <div className="space-y-4">
       <div className="text-center">

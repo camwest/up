@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { parsePatternName } from "@/lib/patterns";
-import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
+import { PatternPreview } from "@/components/pattern-preview";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

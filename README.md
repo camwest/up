@@ -29,17 +29,9 @@ Concert Finder is a zero-friction web app that helps people find each other in c
 
 ## 📋 Development Status
 
-**Current Phase**: Foundation (Phase 1)
-
 - [📊 GitHub Project Board](https://github.com/users/camwest/projects/1/views/1)
 - [📋 Development Issues](https://github.com/camwest/up/issues)
 - [📖 MVP Specification](./specs/mvp.md)
-
-### Development Phases
-1. **Phase 1**: Foundation - Remove auth, create patterns, display component
-2. **Phase 2**: Core Features - Location, collision detection, real-time
-3. **Phase 3**: Polish - Sharing, venue labels, mobile/PWA
-4. **Phase 4**: Launch - Production deployment and testing
 
 ## 🏃‍♂️ Quick Start
 
