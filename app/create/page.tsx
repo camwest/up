@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { generateUniquePattern, createTrueCustomPattern, generateColorblindFriendlyPattern, type Pattern, PATTERN_NAMES, COLORBLIND_FRIENDLY } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
@@ -8,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Copy, Shuffle, Settings, ArrowLeft, Share2, ChevronDown } from "lucide-react";
+import { Copy, Shuffle, Share2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function CreatePattern() {
@@ -137,18 +136,11 @@ export default function CreatePattern() {
       {/* Floating Controls */}
       <div className="relative z-20 min-h-screen flex flex-col">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between p-2">
-          <Button variant="ghost" asChild className="text-foreground/80 hover:text-foreground">
-            <Link href="/">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Signal Up
-            </Link>
-          </Button>
-          
+        <div className="flex items-center p-2 w-full">
           {shareUrl && generatedPattern && (
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
+                <Button variant="ghost" className="text-foreground/80 hover:text-foreground ml-auto">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
@@ -183,14 +175,6 @@ export default function CreatePattern() {
           <div className="w-full">
             <div className="border border-foreground/20 bg-glass backdrop-blur p-6 font-body text-sm text-foreground space-y-6">
               
-              {/* Pattern Name Display */}
-              {generatedPattern && (
-                <div className="text-center">
-                  <p className="text-muted-foreground text-xs uppercase tracking-wide">
-                    {generatedPattern.pattern.animation} pattern at speed {generatedPattern.pattern.speed}
-                  </p>
-                </div>
-              )}
               
               {/* Color Selection */}
               <div className="grid grid-cols-2 gap-4">
@@ -319,7 +303,7 @@ export default function CreatePattern() {
             <Button 
               onClick={randomizeInputs}
               variant="ghost"
-              className="font-headline border border-foreground/20 bg-glass backdrop-blur"
+              className="font-headline border border-foreground/20 bg-glass backdrop-blur h-[42px] px-2"
             >
               <Shuffle className="w-4 h-4 mr-2" />
               Randomize
@@ -330,7 +314,7 @@ export default function CreatePattern() {
                 applyAccessibilityMode(value as keyof typeof COLORBLIND_FRIENDLY);
               }
             }}>
-              <SelectTrigger className="border border-foreground/20 bg-glass backdrop-blur font-headline h-[42px] px-6">
+              <SelectTrigger className="border border-foreground/20 bg-glass backdrop-blur font-headline h-[42px] px-2">
                 <SelectValue placeholder="Accessibility" />
               </SelectTrigger>
               <SelectContent>
