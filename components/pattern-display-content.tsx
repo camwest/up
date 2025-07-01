@@ -225,6 +225,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
           pattern={pattern}
           className="w-full h-full"
           fullscreen
+          hideInstructions
         />
       </div>
       

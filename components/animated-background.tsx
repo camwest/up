@@ -6,69 +6,98 @@ export function AnimatedBackground() {
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-background">
       {/* Debug: Red background to verify rendering */}
       
-      {/* Subtle grid pattern */}
+      {/* 8-bit grid pattern */}
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-30"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(255, 0, 140, 0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 0, 140, 0.5) 1px, transparent 1px)
+            linear-gradient(rgba(255, 0, 140, 0.6) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 0, 140, 0.6) 1px, transparent 1px)
           `,
-          backgroundSize: '40px 40px',
+          backgroundSize: '8px 8px',
+          imageRendering: 'pixelated',
         }}
       />
       
       {/* Animated signal hints - floating orbs */}
       <div className="absolute inset-0 w-full h-full">
-        {/* Primary signal hint */}
+        {/* 8-bit signal pixels */}
         <div 
-          className="absolute w-3 h-3 bg-primary/40 rounded-full animate-pulse8"
+          className="absolute w-2 h-2 bg-primary/50 animate-pulse8"
           style={{
             top: '20%',
             left: '15%',
             animationDuration: '1200ms',
-            animationDelay: '0ms'
+            animationDelay: '0ms',
+            imageRendering: 'pixelated'
           }}
         />
         
-        {/* Secondary signal hints */}
+        {/* Concert lighting signals */}
         <div 
-          className="absolute w-2 h-2 bg-cyan/50 rounded-full animate-pulse8"
+          className="absolute w-1 h-1 bg-cyan/60 animate-strobe8"
           style={{
             top: '40%',
             right: '20%',
-            animationDuration: '1000ms',
-            animationDelay: '400ms'
+            animationDuration: '140ms',
+            animationDelay: '400ms',
+            imageRendering: 'pixelated'
           }}
         />
         
         <div 
-          className="absolute w-2.5 h-2.5 bg-lime/40 rounded-full animate-pulse8"
+          className="absolute w-2 h-2 bg-lime/40 animate-pulse8"
           style={{
             top: '70%',
             left: '25%',
-            animationDuration: '1400ms',
-            animationDelay: '800ms'
+            animationDuration: '600ms',
+            animationDelay: '800ms',
+            imageRendering: 'pixelated'
           }}
         />
         
         <div 
-          className="absolute w-2 h-2 bg-violet/30 rounded-full animate-pulse8"
+          className="absolute w-1 h-1 bg-violet/30 animate-strobe8"
           style={{
             top: '60%',
             right: '30%',
-            animationDuration: '1100ms',
-            animationDelay: '1200ms'
+            animationDuration: '140ms',
+            animationDelay: '1200ms',
+            imageRendering: 'pixelated'
           }}
         />
         
         <div 
-          className="absolute w-2.5 h-2.5 bg-amber/50 rounded-full animate-pulse8"
+          className="absolute w-2 h-2 bg-amber/50 animate-pulse8"
           style={{
             top: '25%',
             right: '40%',
-            animationDuration: '1300ms',
-            animationDelay: '300ms'
+            animationDuration: '600ms',
+            animationDelay: '300ms',
+            imageRendering: 'pixelated'
+          }}
+        />
+        
+        {/* Additional concert atmosphere signals */}
+        <div 
+          className="absolute w-1 h-1 bg-magenta/40 animate-strobe8"
+          style={{
+            top: '10%',
+            left: '70%',
+            animationDuration: '140ms',
+            animationDelay: '600ms',
+            imageRendering: 'pixelated'
+          }}
+        />
+        
+        <div 
+          className="absolute w-2 h-2 bg-cyan/30 animate-pulse8"
+          style={{
+            top: '80%',
+            right: '10%',
+            animationDuration: '1200ms',
+            animationDelay: '1000ms',
+            imageRendering: 'pixelated'
           }}
         />
       </div>

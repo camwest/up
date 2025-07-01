@@ -1,6 +1,63 @@
 "use client";
 
 import { Pattern, getAnimationDuration } from "@/lib/patterns";
+
+// Helper function to find color name from hex (reusing logic from patterns.ts)
+function findColorName(hex: string): string {
+  const COLOR_PALETTE = {
+    'NEON': { h: 329, s: 100, l: 50 },
+    'VOLT': { h: 335, s: 100, l: 45 },
+    'FIRE': { h: 320, s: 100, l: 55 },
+    'TRON': { h: 186, s: 100, l: 50 },
+    'AQUA': { h: 180, s: 100, l: 45 },
+    'SYNC': { h: 190, s: 100, l: 55 },
+    'ACID': { h: 79, s: 100, l: 53 },
+    'BEAM': { h: 75, s: 100, l: 48 },
+    'BUZZ': { h: 85, s: 100, l: 58 },
+    'GOLD': { h: 45, s: 100, l: 50 },
+    'VOID': { h: 271, s: 100, l: 50 }
+  } as const;
+
+  const { h } = hexToHsl(hex);
+  
+  let closestName = 'NEON';
+  let closestDistance = Infinity;
+  
+  for (const [name, color] of Object.entries(COLOR_PALETTE)) {
+    const distance = Math.abs(h - color.h);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestName = name;
+    }
+  }
+  
+  return closestName;
+}
+
+function hexToHsl(hex: string): { h: number; s: number; l: number } {
+  const r = parseInt(hex.slice(0, 2), 16) / 255;
+  const g = parseInt(hex.slice(2, 4), 16) / 255;
+  const b = parseInt(hex.slice(4, 6), 16) / 255;
+  
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
 import { useEffect, useState } from "react";
 
 interface PatternPreviewProps {
@@ -8,9 +65,10 @@ interface PatternPreviewProps {
   className?: string;
   fullscreen?: boolean;
   onExit?: () => void;
+  hideInstructions?: boolean;
 }
 
-export function PatternPreview({ pattern, className = "", fullscreen = false, onExit }: PatternPreviewProps) {
+export function PatternPreview({ pattern, className = "", fullscreen = false, onExit, hideInstructions = false }: PatternPreviewProps) {
   const [mounted, setMounted] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
   const [batteryOptimized, setBatteryOptimized] = useState(false);
@@ -127,16 +185,6 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
         />
       )}
       
-      {/* Overlay content for non-fullscreen */}
-      {!fullscreen && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-black/50 backdrop-blur-sm rounded px-3 py-1">
-            <span className="text-white text-sm font-mono">
-              {pattern.animation.toUpperCase()} • {pattern.speed}x
-            </span>
-          </div>
-        </div>
-      )}
       
       {/* Fullscreen overlay with auto-hide */}
       {fullscreen && showOverlay && (
@@ -152,19 +200,21 @@ export function PatternPreview({ pattern, className = "", fullscreen = false, on
           )}
           
           {/* Instructions */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-500">
-            <div className="bg-black/70 backdrop-blur-sm rounded-sm px-4 py-2 text-center">
-              <p className="text-white text-sm font-medium mb-1">
-                Hold phone up high ↑
-              </p>
-              <p className="text-white/70 text-xs">
-                Your friends are looking for this pattern
-              </p>
-              <p className="text-white/50 text-xs mt-1">
-                Tap to show/hide controls
-              </p>
+          {!hideInstructions && (
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-500">
+              <div className="bg-black/70 backdrop-blur-sm rounded-sm px-4 py-2 text-center">
+                <p className="text-white text-sm font-medium mb-1">
+                  Hold phone up high ↑
+                </p>
+                <p className="text-white/70 text-xs">
+                  Your friends are looking for this pattern
+                </p>
+                <p className="text-white/50 text-xs mt-1">
+                  Tap to show/hide controls
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </div>
@@ -185,32 +235,22 @@ export function PatternInfo({ pattern, patternName }: PatternInfoProps) {
         </p>
       </div>
       
-      <div className="grid grid-cols-2 gap-4 text-sm">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div 
-              className="w-4 h-4 rounded border border-border"
-              style={{ backgroundColor: `#${pattern.primary}` }}
-            />
-            <span className="text-foreground">Primary</span>
-          </div>
-          <code className="text-xs text-primary bg-primary/10 px-2 py-1 rounded">
-            #{pattern.primary}
-          </code>
+      <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-4 h-4 border border-border"
+            style={{ backgroundColor: `#${pattern.primary}` }}
+          />
+          <span className="text-foreground">{findColorName(pattern.primary)}</span>
         </div>
         
         {pattern.secondary && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <div 
-                className="w-4 h-4 rounded border border-border"
-                style={{ backgroundColor: `#${pattern.secondary}` }}
-              />
-              <span className="text-foreground">Secondary</span>
-            </div>
-            <code className="text-xs text-accent bg-accent/10 px-2 py-1 rounded">
-              #{pattern.secondary}
-            </code>
+          <div className="flex items-center gap-2">
+            <div 
+              className="w-4 h-4 border border-border"
+              style={{ backgroundColor: `#${pattern.secondary}` }}
+            />
+            <span className="text-foreground">{findColorName(pattern.secondary)}</span>
           </div>
         )}
       </div>

@@ -68,10 +68,10 @@ export default function CreatePattern() {
     <main className="min-h-screen relative overflow-hidden">
       {/* Fullscreen Pattern Background */}
       {generatedPattern && (
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 pattern-display">
           <PatternPreview 
             pattern={generatedPattern.pattern}
-            className="w-full h-full"
+            className="w-full h-full pattern-layer"
           />
         </div>
       )}
@@ -82,8 +82,8 @@ export default function CreatePattern() {
       {/* Floating Controls */}
       <div className="relative z-20 min-h-screen flex flex-col">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between p-4">
-          <Button variant="ghost" size="sm" asChild className="text-foreground/80 hover:text-foreground">
+        <div className="flex items-center justify-between p-6">
+          <Button variant="ghost" asChild className="text-foreground/80 hover:text-foreground">
             <Link href="/">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Signal Up
@@ -93,23 +93,23 @@ export default function CreatePattern() {
           {shareUrl && generatedPattern && (
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="text-foreground/80 hover:text-foreground">
+                <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80" align="end">
+              <PopoverContent className="w-80 border border-foreground/20 bg-glass backdrop-blur" align="end">
                 <div className="space-y-3">
                   <div className="space-y-2">
-                    <h4 className="font-headline font-semibold text-sm">Share Signal</h4>
+                    <h4 className="font-headline font-semibold text-sm">Signal Locked ⚡</h4>
                     <div className="flex gap-2">
-                      <code className="flex-1 text-xs bg-muted p-2 rounded text-primary font-mono break-all">
+                      <code className="font-mono text-primary text-shadow-neon bg-background/80 px-3 py-2 border border-primary/30 flex-1 text-xs break-all">
                         {shareUrl}
                       </code>
                       <Button 
                         onClick={copyToClipboard}
+                        variant="ghost"
                         size="sm"
-                        variant="outline"
                         className="shrink-0"
                       >
                         {copySuccess ? "Copied!" : <Copy className="w-4 h-4" />}
@@ -125,10 +125,10 @@ export default function CreatePattern() {
                       variant="primary"
                     />
                     
-                    <Button asChild className="w-full font-headline" variant="outline">
+                    <Button asChild className="w-full font-headline" variant="ghost">
                       <Link href={`/p/${generatedPattern.name}`}>
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        Test Signal
+                        Signal Up to Test
                       </Link>
                     </Button>
                   </div>
@@ -142,7 +142,7 @@ export default function CreatePattern() {
         <div className="flex-1 flex items-center justify-center px-4">
           {generatedPattern && (
             <div className="text-center space-y-2">
-              <div className="bg-background/90 backdrop-blur-sm rounded-sm border p-4 max-w-sm">
+              <div className="border border-foreground/20 bg-glass backdrop-blur px-4 py-3 font-body text-sm text-foreground max-w-sm">
                 <PatternInfo 
                   pattern={generatedPattern.pattern}
                   patternName={generatedPattern.name}
@@ -153,15 +153,15 @@ export default function CreatePattern() {
         </div>
         
         {/* Bottom Floating Controls */}
-        <div className="p-4 space-y-3">
+        <div className="p-6 space-y-4 pb-8">
           {/* Quick Actions */}
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-3 justify-center">
             <Button 
               onClick={generatePattern}
-              className="font-headline shadow-neon"
+              className="font-headline font-bold bg-primary text-primary-foreground px-6 py-3 shadow-neon uppercase tracking-wide text-lg active:translate-y-0.5 transition-transform"
             >
               <Shuffle className="w-4 h-4 mr-2" />
-              New Signal
+              Signal Up New
             </Button>
           </div>
           
@@ -170,20 +170,20 @@ export default function CreatePattern() {
             <Popover>
               <PopoverTrigger asChild>
                 <Button 
-                  variant="outline" 
-                  className="w-full bg-background/90 backdrop-blur-sm border font-headline"
+                  variant="ghost" 
+                  className="w-full border border-foreground/20 bg-glass backdrop-blur font-headline"
                 >
                   <Settings className="w-4 h-4 mr-2" />
                   Generation Options
                   <ChevronDown className="w-4 h-4 ml-auto" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-64 bg-background/95 backdrop-blur-sm border p-2">
+              <PopoverContent className="w-64 border border-foreground/20 bg-glass backdrop-blur p-4">
                 <div className="space-y-2">
                   {/* Mode Selection */}
                   <div className="grid grid-cols-2 gap-1">
                     <Button 
-                      variant={!customMode && !colorblindMode ? "default" : "outline"}
+                      variant={!customMode && !colorblindMode ? "default" : "ghost"}
                       size="sm"
                       onClick={() => { setCustomMode(false); setColorblindMode(null); generatePattern(); }}
                       className="text-xs font-headline h-8"
@@ -193,7 +193,7 @@ export default function CreatePattern() {
                     </Button>
                     
                     <Button 
-                      variant={customMode ? "default" : "outline"}
+                      variant={customMode ? "default" : "ghost"}
                       size="sm"
                       onClick={() => { 
                         const newCustomMode = !customMode;
