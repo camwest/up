@@ -137,7 +137,7 @@ export default function CreatePattern() {
       {/* Floating Controls */}
       <div className="relative z-20 min-h-screen flex flex-col">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between p-6">
+        <div className="flex items-center justify-between p-2">
           <Button variant="ghost" asChild className="text-foreground/80 hover:text-foreground">
             <Link href="/">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -153,7 +153,7 @@ export default function CreatePattern() {
                   Share
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80 border border-foreground/20 bg-glass backdrop-blur" align="end">
+              <PopoverContent className="w-[calc(100vw-2rem)] max-w-80 border border-foreground/20 bg-glass backdrop-blur" align="end">
                 <div className="space-y-3">
                   <div className="space-y-2">
                     <h4 className="font-headline font-semibold text-sm">Signal Locked ⚡</h4>
@@ -179,8 +179,8 @@ export default function CreatePattern() {
         </div>
         
         {/* Center Content - WYSIWYG Custom Form */}
-        <div className="flex-1 flex items-center justify-center px-4">
-          <div className="w-full max-w-md">
+        <div className="flex-1 flex items-center justify-center px-2">
+          <div className="w-full">
             <div className="border border-foreground/20 bg-glass backdrop-blur p-6 font-body text-sm text-foreground space-y-6">
               
               {/* Pattern Name Display */}
@@ -313,7 +313,7 @@ export default function CreatePattern() {
         </div>
         
         {/* Bottom Floating Controls */}
-        <div className="p-6 space-y-4 pb-8">
+        <div className="p-2 space-y-4">
           {/* Quick Actions */}
           <div className="flex gap-3 justify-center">
             <Button 

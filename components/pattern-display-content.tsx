@@ -248,8 +248,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
             <ShareButton
               patternUrl={typeof window !== 'undefined' ? window.location.href : ''}
               patternName={patternName.toUpperCase()}
-              variant="outline"
-              size="sm"
+              variant="secondary"
               className="text-foreground hover:text-foreground bg-background/80 backdrop-blur-sm"
             />
           </div>
