@@ -2,6 +2,8 @@
 
 > Find your friends in the crowd with unique flashing patterns
 
+**🚀 [Try it now at signalup.app](https://signalup.app)**
+
 Signal Up is a zero-friction web app that helps people find each other in crowded venues by generating unique, shareable flashing patterns on their phones. No app install required.
 
 ## 🚀 Key Features
