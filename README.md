@@ -1,8 +1,8 @@
-# Concert Finder
+# Signal Up
 
 > Find your friends in the crowd with unique flashing patterns
 
-Concert Finder is a zero-friction web app that helps people find each other in crowded venues by generating unique, shareable flashing patterns on their phones. No app install required.
+Signal Up is a zero-friction web app that helps people find each other in crowded venues by generating unique, shareable flashing patterns on their phones. No app install required.
 
 ## 🚀 Key Features
 
@@ -43,7 +43,7 @@ Concert Finder is a zero-friction web app that helps people find each other in c
 
 ```bash
 # Clone and install
-git clone <repo-url>
+git clone https://github.com/camwest/up.git
 cd up
 bun install
 
@@ -93,7 +93,7 @@ bun run supabase:reset
 
 ## 🚀 Deployment
 
-Concert Finder is designed to deploy seamlessly on Vercel with Supabase:
+Signal Up is designed to deploy seamlessly on Vercel with Supabase:
 
 1. **Database**: Supabase with anonymous authentication enabled
 2. **Frontend**: Vercel with automatic deployments from GitHub
