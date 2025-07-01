@@ -86,6 +86,8 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
 
   // Handle strobe warning if needed
   const handleStrobeWarningAccept = () => {
+    // Save consent to localStorage
+    localStorage.setItem('strobeWarningAccepted', 'true');
     setShowStrobeWarning(false);
   };
 
@@ -98,7 +100,11 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
   // Check for strobe warning on mount
   useEffect(() => {
     if (pattern?.animation === 'strobe') {
-      setShowStrobeWarning(true);
+      // Check if user has already accepted the warning
+      const hasAccepted = localStorage.getItem('strobeWarningAccepted') === 'true';
+      if (!hasAccepted) {
+        setShowStrobeWarning(true);
+      }
     }
   }, [pattern]);
 
