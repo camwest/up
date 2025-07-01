@@ -16,7 +16,7 @@ export function Hero() {
 
       <Link
         href="/create"
-        className="font-headline font-bold bg-primary text-primary-foreground px-10 py-4 shadow-neon uppercase tracking-wide text-xl active:translate-y-0.5 transition-transform hover:bg-primary/90"
+        className="font-headline font-bold border border-foreground/20 bg-glass backdrop-blur text-foreground px-10 py-4 uppercase tracking-wide text-xl active:translate-y-0.5 transition-transform hover:bg-foreground/10"
       >
         Signal Up Now
       </Link>
