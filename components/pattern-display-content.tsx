@@ -112,7 +112,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
   // Strobe Warning Dialog
   if (showStrobeWarning && pattern) {
     return (
-      <main className="min-h-screen bg-background text-foreground flex flex-col">
+      <main className="min-h-dvh bg-background text-foreground flex flex-col">
         <nav className="w-full border-b border-border">
           <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
             <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
@@ -172,7 +172,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
 
   if (error || !pattern) {
     return (
-      <main className="min-h-screen bg-background text-foreground flex flex-col">
+      <main className="min-h-dvh bg-background text-foreground flex flex-col">
         <nav className="w-full border-b border-border">
           <div className="max-w-4xl mx-auto flex justify-between items-center p-3">
             <Link href="/" className="font-display font-bold text-lg text-primary text-shadow-neon">
@@ -223,7 +223,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
 
   return (
     <main 
-      className="min-h-screen relative overflow-hidden cursor-pointer" 
+      className="min-h-dvh relative overflow-hidden cursor-pointer" 
       onClick={handleContainerTap}
     >
       {/* Fullscreen Pattern Background */}
@@ -243,7 +243,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
         {/* Dark Overlay for Readability */}
         <div className="absolute inset-0 bg-background/60" />
         
-        <div className="relative z-20 min-h-screen flex flex-col">
+        <div className="relative z-20 min-h-dvh flex flex-col">
           {/* Top Navigation */}
           <div className="flex items-center justify-between p-2">
             <Button variant="ghost" asChild className="text-foreground/80 hover:text-foreground">

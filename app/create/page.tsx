@@ -118,7 +118,7 @@ export default function CreatePattern() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className="min-h-dvh relative overflow-hidden">
       {/* Fullscreen Pattern Background */}
       {generatedPattern && (
         <div className="absolute inset-0 z-0 pattern-display">
@@ -133,7 +133,7 @@ export default function CreatePattern() {
       <div className="absolute inset-0 bg-background/80 z-10" />
       
       {/* Floating Controls */}
-      <div className="relative z-20 min-h-screen flex flex-col">
+      <div className="relative z-20 min-h-dvh flex flex-col">
         {/* Top Navigation */}
         <div className="flex items-center p-2 w-full">
           {shareUrl && generatedPattern && (

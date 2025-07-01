@@ -7,23 +7,23 @@ Concert Finder is a zero-friction web app that helps people find each other in c
 ## 🚀 Key Features
 
 - **Zero Friction**: Click link → pattern displays immediately
-- **Real-time Coordination**: See other patterns in your area  
-- **Smart Collision Detection**: Automatically adjusts conflicting patterns
+- **Custom Patterns**: Choose colors, animations (pulse/strobe/wave/fade), and speeds
 - **Mobile-First**: Designed for phones held up in crowds
-- **Fully Anonymous**: No accounts, no tracking, patterns auto-expire
+- **Accessibility**: Colorblind-friendly options and seizure warnings
+- **Instant Sharing**: Share pattern links via text/messaging
 
 ## 🎯 How It Works
 
-1. **Create**: Generate a unique flashing pattern based on your location
-2. **Share**: Send the pattern link to friends via text/messaging
-3. **Find**: Hold phones up with matching patterns to locate each other
-4. **Connect**: Real-time updates show when others join your area
+1. **Create**: Generate a unique flashing pattern with custom colors and animations
+2. **Share**: Send the pattern link to friends via text/messaging  
+3. **Display**: Friends click link → pattern displays fullscreen immediately
+4. **Find**: Hold phones up with matching patterns to locate each other in crowds
 
 ## 🛠 Tech Stack
 
 - **Frontend**: Next.js 14 (App Router) with TypeScript
-- **Database**: Supabase (Postgres + Realtime + PostGIS)
-- **Styling**: Tailwind CSS + shadcn/ui
+- **Database**: Supabase (anonymous auth only)
+- **Styling**: Tailwind CSS + shadcn/ui with "8-Bit Neon Signals" design system
 - **Package Manager**: Bun
 - **Hosting**: Vercel
 
@@ -76,12 +76,20 @@ bun run supabase:reset
 - [MVP Specification](./specs/mvp.md) - Complete product specification
 - [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment requirements
 
+## 🎨 Pattern Customization
+
+- **5 Color Families**: NEON (magenta), TRON (cyan), ACID (lime), GOLD (amber), VOID (violet)
+- **4 Animation Types**: PULSE (smooth breathing), STROBE (fast flashing), WAVE (moving sweep), FADE (gentle pulse)
+- **5 Speed Levels**: From slow ambient to high-attention emergency
+- **Accessibility Options**: Colorblind-friendly presets for protanopia, deuteranopia, and tritanopia
+- **Safety Features**: Seizure warnings for strobe patterns
+
 ## 🔒 Privacy & Security
 
 - **Fully anonymous** - no user accounts or personal data stored
-- **Location privacy** - only approximate geohash stored (~600m precision)
-- **Auto-expiry** - patterns automatically expire after 30 minutes
-- **No tracking** - no analytics or user behavior monitoring
+- **Client-side generation** - patterns created entirely in browser
+- **No tracking** - no analytics or user behavior monitoring  
+- **Open source** - full transparency in code and functionality
 
 ## 🚀 Deployment
 
@@ -89,7 +97,7 @@ Concert Finder is designed to deploy seamlessly on Vercel with Supabase:
 
 1. **Database**: Supabase with anonymous authentication enabled
 2. **Frontend**: Vercel with automatic deployments from GitHub
-3. **Real-time**: Supabase Realtime for pattern coordination
+3. **Pattern Generation**: Fully client-side, no server dependencies
 
 See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment instructions.
 

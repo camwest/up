@@ -135,6 +135,16 @@ export default {
         '80': '640px',
         '96': '768px',
       },
+      height: {
+        'dvh': '100dvh',
+        'svh': '100svh', 
+        'lvh': '100lvh',
+      },
+      minHeight: {
+        'dvh': '100dvh',
+        'svh': '100svh',
+        'lvh': '100lvh',
+      },
   		animation: {
   			'pulse8': 'pulse8 600ms steps(4, end) infinite',
   			'strobe8': 'strobe8 140ms steps(2, end) infinite',
