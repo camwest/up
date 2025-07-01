@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { parsePatternName } from "@/lib/patterns";
 import { PatternPreview, PatternInfo } from "@/components/pattern-preview";
-import { ShareButton } from "@/components/share-modal";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Home, AlertCircle } from "lucide-react";
+import { Home, AlertCircle, Share2, Copy } from "lucide-react";
 
 interface PatternDisplayContentProps {
   patternName: string;
@@ -17,6 +17,7 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
   const [showControls, setShowControls] = useState(true); // Show controls initially
   const [showInstructions, setShowInstructions] = useState(true); // Show "hold up high" initially
   const [showStrobeWarning, setShowStrobeWarning] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
@@ -244,19 +245,57 @@ export function PatternDisplayContent({ patternName }: PatternDisplayContentProp
         
         <div className="relative z-20 min-h-screen flex flex-col">
           {/* Top Navigation */}
-          <div className="flex items-center justify-between p-4">
-            <Button variant="outline" asChild className="font-headline bg-background/90 backdrop-blur-sm">
+          <div className="flex items-center justify-between p-2">
+            <Button variant="ghost" asChild className="text-foreground/80 hover:text-foreground">
               <Link href="/create">
                 New Signal
               </Link>
             </Button>
             
-            <ShareButton
-              patternUrl={typeof window !== 'undefined' ? window.location.href : ''}
-              patternName={patternName.toUpperCase()}
-              variant="secondary"
-              className="text-foreground hover:text-foreground bg-background/80 backdrop-blur-sm"
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[calc(100vw-2rem)] max-w-80 border border-foreground/20 bg-glass backdrop-blur" align="end">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <h4 className="font-headline font-semibold text-sm">Signal Locked ⚡</h4>
+                    <div className="flex gap-2">
+                      <code className="font-mono text-primary text-shadow-neon bg-background/80 px-3 py-2 border border-primary/30 flex-1 text-xs break-all">
+                        {typeof window !== 'undefined' ? window.location.href : ''}
+                      </code>
+                      <Button 
+                        onClick={() => {
+                          const url = typeof window !== 'undefined' ? window.location.href : '';
+                          navigator.clipboard.writeText(url).then(() => {
+                            setCopySuccess(true);
+                            setTimeout(() => setCopySuccess(false), 2000);
+                          }).catch(() => {
+                            // Fallback for older browsers
+                            const textArea = document.createElement('textarea');
+                            textArea.value = url;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textArea);
+                            setCopySuccess(true);
+                            setTimeout(() => setCopySuccess(false), 2000);
+                          });
+                        }}
+                        variant="ghost"
+                        size="sm"
+                        className="shrink-0"
+                      >
+                        {copySuccess ? "Copied!" : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           
         </div>
